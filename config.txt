@@ -1,0 +1,11 @@
+# env configuration file
+env observable location dirt
+dirt_comeback true
+dirt_proba 0.11
+murphy_proba 0.17 
+location_sensor true
+max_episode_steps 100
+episodes 1
+render_mode human
+render_fps 2
+rng_seed 0
