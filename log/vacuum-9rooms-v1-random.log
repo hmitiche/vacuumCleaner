@@ -1,0 +1,3 @@
+INFO:vacuum.world:env reset:
+INFO:vacuum.world:rooms 9, clean 6, dirty 3
+INFO:vacuum.world:agent start location [2 3]
