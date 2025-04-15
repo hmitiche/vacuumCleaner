@@ -15,8 +15,11 @@ class QLearnPolicy(CleanPolicy):
 
 	def __init__(self, world_id, env):
 		super().__init__("q-learning", world_id, env)
-		self._location=Map.location_list(world_id)
-		assert self._locations is not None
+		#self._location=Map.locations_list(world_id)
+		#assert self._locations is not None
+
+	def reset(self):
+		pass
 
 
 	def select_action(self, state):
