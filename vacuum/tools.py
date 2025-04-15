@@ -49,7 +49,7 @@ class Tools:
 			case 0:	p = RandomPolicy(env)
 			case 1: p = GreedyRandomPolicy(world_id, env, eco=eco_mode)
 			case 2:	p = GreedyPolicy(world_id, env, eco=eco_mode)
-			case 3:	p = QLearnerPolicy(world_id, env)
+			case 3:	p = QLearnPolicy(world_id, env)
 			case _:
 				raise ValueError(f"Incorrect policy number {policy_id}!")
 				#self.logger.critical("Incorrect policy id!")

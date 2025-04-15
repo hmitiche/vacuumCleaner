@@ -7,16 +7,17 @@
 
 	#def select_action(self, state):
 		#raise NotImplementedError
+from .base import (CleanPolicy)
+from ..maps import Map
 
-from world import VacuumCleanerWorldEnv
-from policy.base import CleanPolicy
+import numpy as np
 class QLearnPolicy(CleanPolicy):
 
-	def __init__(self, wolrd_id, env):
+	def __init__(self, world_id, env):
 		super().__init__("q-learning", world_id, env)
-		self._location=Map.location_list(wolrd_id)
+		self._location=Map.location_list(world_id)
 		assert self._locations is not None
-		self._env=env
+
 
 	def select_action(self, state):
 		"""Choisit une action selon la politique ε-greedy."""
@@ -43,13 +44,13 @@ class QLearnPolicy(CleanPolicy):
 				action = self.select_action(state)
 				(next_obs, reward, terminated, truncated,
 				 info) = self.env.step(action)
-				next_state = self.get_state_index(next_obs)
-				q[state, action] = q[state, action] + learning_rate_a * (
-						reward + discount_factor_g * np.max(q[new_state, :]) - q[state, action]
+				new_state = self.get_state_index(next_obs)
+				self.q_table[state, action] = self.q_table[state, action] + learning_rate_a * (
+						reward + discount_factor_g * np.max(self.q_table[new_state, :]) - self.q_table[state, action]
 				)
 
 				self._episode_reward += reward
-				state = next_state
+				state = new_state
 			epsilon = max(epsilon_min, epsilon - epsilon_decay_rate)
 
 
