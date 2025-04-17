@@ -35,8 +35,9 @@ class CleanPolicy():
 		self._action_dict = self._get_action_dict()
 		self._location_sensor = env.unwrapped.location_sensor
 		logfile = f"{LOG_PATH}{world_id}-{policy_id}.log"
-		if os.path.isfile(logfile):
-			os.remove(logfile)  
+		#if os.path.isfile(logfile):
+		#	os.remove(logfile)
+
 		logging.basicConfig(filename=logfile, level=logging.DEBUG)
 		self.logger = logging.getLogger(__name__)
 		self._seeded = False
