@@ -9,14 +9,36 @@
 		#raise NotImplementedError
 from .base import (CleanPolicy)
 from ..maps import Map
-
+import os
+import pickle
 import numpy as np
 class QLearnPolicy(CleanPolicy):
 
 	def __init__(self, world_id, env):
 		super().__init__("q-learning", world_id, env)
-		self._location=Map.location_list(world_id)
-		assert self._locations is not None
+		#self._location=Map.location_list(world_id)
+		#assert self._locations is not None
+
+	def reset(self):
+		"""Méthode reset héritée de la classe parente CleanPolicy."""
+		pass
+
+	def save_qtable(self):
+		"""Sauvegarde la Q-table avec un nom spécifique à la carte"""
+		filename =f"data/qlearning_table_map_{self.world_id}.pkl"
+		os.makedirs(os.path.dirname(filename), exist_ok=True)
+		with open(filename, 'wb') as f:
+			pickle.dump(self.q_table, f)
+
+	def load_qtable(self):
+		"""Charge la Q-table spécifique à la carte"""
+		filename =f"data/qlearning_table_map_{self.world_id}.pkl"
+		if os.path.exists(filename):
+			with open(filename, 'rb') as f:
+				self.q_table = pickle.load(f)
+			self.trained = True
+			return True
+		return False
 
 
 	def select_action(self, state):
