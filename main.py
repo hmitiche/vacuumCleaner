@@ -135,17 +135,27 @@ def main():
 		print("step \t action  reward  state(ag_loc,dirt) \t info(dirty, act_done)")		
 		done = False
 		# espisode sim loop
-		while not done:
-			action = policy.select_action(state)
-			state, reward, done, truncated, info = env.step(action)
-			step = info['step']
-			dirty_rooms = info['dirty_spots']
-			action_success = info['action_success']
-			state_tuple = (state['agent'][0], state['agent'][1]) ,\
-			 'dirty' if state['dirt'] else 'clean' 
-			print(step, ": \t", action_dict[action], "\t", round(reward,2), "\t",\
-			state_tuple, "\t (", dirty_rooms,",", action_success,")")
-			if truncated: break
+		if (policy_id==3):
+			if policy.load_qtable():
+				print(f"Q-table chargée pour la carte {world_id}")
+			else:
+				print(f"Entraînement pour la carte {world_id}...")
+				policy.train_q_learning(episodes=1000)
+				policy.save_qtable()
+				print(f"Q-table sauvegardée pour la carte {world_id}")
+
+		else:
+			while not done:
+				action = policy.select_action(state)
+				state, reward, done, truncated, info = env.step(action)
+				step = info['step']
+				dirty_rooms = info['dirty_spots']
+				action_success = info['action_success']
+				state_tuple = (state['agent'][0], state['agent'][1]) ,\
+			 	'dirty' if state['dirt'] else 'clean'
+				print(step, ": \t", action_dict[action], "\t", round(reward,2), "\t",\
+				state_tuple, "\t (", dirty_rooms,",", action_success,")")
+				if truncated: break
 
 		#clean = env.get_wrapper_attr('_clean_rooms')
 		rooms = env.get_wrapper_attr('_nbr_rooms')
