@@ -1,4 +1,4 @@
-
+ 
 """
 world.py
 ________
@@ -250,7 +250,7 @@ class VacuumCleanerWorldEnv(gym.Env):
 		the map (such initial distribution may ve not been pre-defined in 'maps.py').
 		:param proba: probability of dirt re-appearance at any room. 
 		"""
-		assert self.dirt_comeback is True
+		#assert self.dirt_comeback is True
 		if proba == None:
 			proba = self.dirt_proba
 		row, col = self.map.shape
