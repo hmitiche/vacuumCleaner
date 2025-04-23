@@ -29,7 +29,7 @@ __author__ = "Hakim Mitiche"
 __email__ = "h.mitiche@gmail.com"
 __status__ = "beta-version"
 """
-
+from vacuum.policy.qlearning import QLearnPolicy
 from vacuum.world import VacuumCleanerWorldEnv
 from vacuum.tools import Tools
 from vacuum.maps import Map
@@ -40,7 +40,7 @@ import logging
 import os, os.path
 import sys
 
-EPISODES = 1                  # default value
+EPISODES = 1        # default value
 STEPS = 100                   # default value
 SEED = 0                      # RNG seed, for env dynamics replication
 LOG_PATH = 'log/'
@@ -110,6 +110,7 @@ def main():
 	# create and reset the selected cleaning policy
 	policy = Tools.make_policy(policy_id, world_id, env, eco_mode=eco_flag)
 	policy.reset(seed=SEED)
+
 	env.unwrapped.set_agent_name(policy_id)			# for GUI randering
 	print("[info] Policy: {}".format(policy_id))
 	print('[info] Map ID: {}'.format(world_id))
@@ -125,6 +126,16 @@ def main():
 	cleanings = np.zeros(nbr_episodes)
 	travels = np.zeros(nbr_episodes)
 	# simulation main loop
+	if  isinstance(policy, QLearnPolicy):
+
+		EPISODES = 1000
+		if policy.load_qtable():
+			print(f"Q-table chargée pour la carte {world_id}")
+		else:
+			print(f"Entraînement pour la carte {world_id} sur {EPISODES} épisodes...")
+			policy.train_q_learning(env, episodes=EPISODES)
+			print(f"Q-table sauvegardée pour la carte {world_id}")
+
 	for eps in range(nbr_episodes):
 		print("[info] episode {}, world configuration: ".format(eps+1))
 		# reset the agent  policy and environment
@@ -135,17 +146,29 @@ def main():
 		print("step \t action  reward  state(ag_loc,dirt) \t info(dirty, act_done)")		
 		done = False
 		# espisode sim loop
+
 		while not done:
-			action = policy.select_action(state)
-			state, reward, done, truncated, info = env.step(action)
-			step = info['step']
-			dirty_rooms = info['dirty_spots']
-			action_success = info['action_success']
-			state_tuple = (state['agent'][0], state['agent'][1]) ,\
-			 'dirty' if state['dirt'] else 'clean' 
-			print(step, ": \t", action_dict[action], "\t", round(reward,2), "\t",\
-			state_tuple, "\t (", dirty_rooms,",", action_success,")")
-			if truncated: break
+			#if (policy_id == 3):
+			#	EPISODES=1000
+			#	if policy.load_qtable():
+			#		print(f"Q-table chargée pour la carte {world_id}")
+			#		action = policy.select_action(state)
+			#	else:
+			#		print(f"Entraînement pour la carte {world_id}...")
+			#		policy.train_q_learning(episodes=1000)
+			#		print(f"Q-table sauvegardée pour la carte {world_id}")
+
+			#else:
+				action = policy.select_action(state)
+				state, reward, done, truncated, info = env.step(action)
+				step = info['step']
+				dirty_rooms = info['dirty_spots']
+				action_success = info['action_success']
+				state_tuple = (state['agent'][0], state['agent'][1]) ,\
+				'dirty' if state['dirt'] else 'clean'
+				print(step, ": \t", action_dict[action], "\t", round(reward,2), "\t",\
+				state_tuple, "\t (", dirty_rooms,",", action_success,")")
+				if truncated: break
 
 		#clean = env.get_wrapper_attr('_clean_rooms')
 		rooms = env.get_wrapper_attr('_nbr_rooms')
