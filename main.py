@@ -102,7 +102,7 @@ def main():
 	eco_flag = False # economic operation mode				
 	# a greedy policy stops re-exploring rooms when the agent knows 
 	# that it cleaned all rooms and dirt won't comeback
-	if not dirt_flag and policy_n in [1,2]:	
+	if not dirt_flag and policy_id in [1,2]:	
 		# when greedy or greedy random policy selected
 		answer = input("[prompt] does the agent knows that dirt won't comeback? [y/n]")
 		if answer == 'y':	

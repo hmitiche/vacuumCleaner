@@ -134,7 +134,7 @@ class GreedyPolicy(CleanPolicy):
 				act = self.agent_9rooms_v0(room, dirty)
 			case _:
 				act = None
-				self.logger.critical("no agent program for ", self.world_id)
+				self.logger.critical(f"There is no agent program for map: {self.world_id}'")
 		
 		# update last_state_location anyw	
 		self._last_state_location = room

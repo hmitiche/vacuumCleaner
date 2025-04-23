@@ -124,7 +124,7 @@ class GreedyRandomPolicy(CleanPolicy):
 		elif np.array_equal(location, self._locations[0]):
 			action = self._action_dict['right']
 		elif np.array_equal(location, self._locations[2]):	
-			action = self._action_dict['back']
+			action = self._action_dict['down']
 		else:	# middle room
 			assert np.array_equal(location, self._locations[1])
 			# select the room to visit next uniformly at random
