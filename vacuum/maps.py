@@ -2,11 +2,13 @@
 'maps.py'
 ---------
 Vacuum Cleaner World v0
-A group of maps I defined for the smart vaccum cleaner robot.
-Most are 3 by 3 grids where rooms maybe unaccessible 
-(black rooms). The initial distribution of dirt is given, 
-the robot depart location isn't. Many doesn't have dirt, 
-they left to fill by env.reset()
+A set of predefined world maps for the smart vacuum cleaner robot.
+They are 3X3 or 4x4 grids where some squares (rooms) are unaccessible 
+(black rooms). The initial distribution of dirt is given (for most rooms), 
+the robot depart location isn't. However, the user may call 
+'VacuumCleanerWorldEn.sample_dirt()' in 'world.py'
+to change the initial dirt distribution or make sure there some dirt initially 
+in case dirt doesn't comeback. 
 Author: Hakim Mitiche
 Date: March 2024
 """
@@ -18,9 +20,8 @@ class Map:
 
 
 	"""
-	NB: make sure there is an initial dirt distribution in the maps, 
-	in case dirt doesn't comeback. To do so, the method 'sample_dirt()'
-	must be called during env.reset() in in 'world.py'.
+	A class to define world for the Vacuum Cleaner robot.
+	A set of grid maps, 
 	"""
 	# list of vacuum world maps IDs (defined here)
 	# name: 'vacuum-[n]rooms-v[m]', n: number of rooms, m: map version 
@@ -34,7 +35,7 @@ class Map:
 	"vacuum-7rooms-v0", 
 	"vacuum-8rooms-v0", "vacuum-8rooms-v1",
 	"vacuum-9rooms-v0", 
-	"vacuum-11rooms-v0"]
+	"vacuum-12rooms-v0"]
 
 	world_maps = None           # list of pre-defined maps
 	# currently selected world (to share with other '.py')
@@ -282,12 +283,12 @@ class Map:
 			['.', '.', '.'],
 		]
 
-		# 11 rooms v0, 4 x 4 grid
-		world_map11_0 = [			# 
-			['.', '.', '#','#'],
-			['#', '.', '.', '#'],
+		# 12 rooms v0, 4 x 4 grid
+		world_map12_0 = [			# 
+			['.', '.', '#','.'],
+			['#', '.', '#', '.'],
 			['.', '.', '.', '.'],
-			['#', '.', '.', '.']
+			['.', '.', '.', '#']
 		]
 
 		world_maps = [
@@ -299,7 +300,7 @@ class Map:
 		world_map7_0, 
 		world_map8_0, world_map8_1, 
 		world_map9_0, 
-		world_map11_0
+		world_map12_0
 		]
 
 		return world_maps
