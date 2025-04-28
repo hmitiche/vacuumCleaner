@@ -18,14 +18,16 @@ import numpy as np
 #import random
 import logging
 import os, os.path
+from abc import ABC, abstractmethod
 
 
 LOG_PATH = "log/"
 
 
-class CleanPolicy():
+class CleanPolicy(ABC):
 	"""
 	The Base class to define a vacuum cleaning strategy.
+	It can't be instantiatied.
 	"""
 	def __init__(self, policy_id, world_id, env):
 		self.policy_id = policy_id
@@ -42,7 +44,7 @@ class CleanPolicy():
 		self.logger = logging.getLogger(__name__)
 		self._seeded = False
 
-	
+	@abstractmethod
 	def select_action(self, state):
 		""" 
 		Selects a single action to do, based on the current observation.
@@ -63,7 +65,7 @@ class CleanPolicy():
 			"down":2, "right":3, "up":4, "left":5
 		}
 
-	#@abtractmethod
+	@abstractmethod
 	def reset(self):
 		"""
 		Resets the policy parameters used during an episode.
@@ -87,24 +89,28 @@ class RandomPolicy(CleanPolicy):
 					  generator used by the policy. can be that of 
 					  the env?!
 	"""
-	def __init__(self, env, seed=None):
+	def __init__(self, env):
 		self.policy_id = "random"
 		self.nbr_actions = env.action_space.n
-		self._rng = None
+		self._rng = None # random number generator
 		self._seeded = False
 
 	def select_action(self, state):
-		assert self._rng is not None, f"please reset the policy before \
-		can use {__class__.__name__}!"
+		"""
+		selects an action randomly
+		"""
+		#assert self._rng is not None, f"[error] there isn't a RNG!\
+		#'{__class__.__name__}' needs a reset before use!"
 		return self._rng.choice(self.nbr_actions)
 
 
 	def reset(self, seed=None):
 		"""
-		Seeds the RNG only once, unless a seed is provided 
-		during reset.
+		Resets the policy by seeding the RNG.
+		When no seed is given, RNG is seeded once. 
+		The RNG is reseeded if a seed value is provided
 		Parameters:
-			seed (int): default value none
+			seed (int): default value is None
 		"""	
 		if not self._seeded or seed is not None:
 			self._rng = np.random.default_rng(seed)

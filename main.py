@@ -29,10 +29,11 @@ __author__ = "Hakim Mitiche"
 __email__ = "h.mitiche@gmail.com"
 __status__ = "beta-version"
 """
-from vacuum.policy.qlearning import QLearnPolicy
+from constants import *
 from vacuum.world import VacuumCleanerWorldEnv
-from vacuum.tools import Tools
 from vacuum.maps import Map
+from vacuum.policy.helpers import make_policy, get_policies
+from vacuum.policy.qlearning import QLearnPolicy
 import gymnasium as gym
 from gymnasium.wrappers import TimeLimit
 import numpy as np
@@ -40,10 +41,6 @@ import logging
 import os, os.path
 import sys
 
-EPISODES = 1        # default value
-STEPS = 100                   # default value
-SEED = 0                      # RNG seed, for env dynamics replication
-LOG_PATH = 'log/'
 
 # main function
 def main():
@@ -56,6 +53,7 @@ def main():
 	print(f"Welcome to {mygym_name}, a custom open AI Gymnasium environment!")
 	#print("[info] simulation log saved to file: {}".format(logfilename))
 	logfilename = f"{LOG_PATH}{world_id}-{policy_id}.log"
+	print("logfilename", logfilename)
 	# delete the old logfile
 	if os.path.isfile(logfilename):
 		os.remove(logfilename)
@@ -65,8 +63,9 @@ def main():
 	# avoid rendering when there are many simulation episodes
 	if (nbr_episodes > 1):
 		#rmode = 'console'
-		rmode = None
+		rmode = None		# render mode
 	else: rmode = 'human'
+	print(f"[info] rendering mode: {rmode}")
 	# register the env. with its parameters (kwargs)
 	gym.register(
 		 id="VacuumCleanerWorld-v0",
@@ -83,14 +82,14 @@ def main():
 	# create the gym env.
 	env = gym.make('VacuumCleanerWorld-v0', grid=wmap)
 	# seed the env, 
-	# uncomment the next line for reproducible results
-	# or for a single episode comparison
+	# uncomment the next line for reproducible results and comparison
 	env.reset(seed=SEED)
+	print(f"[info] environment RNG seeded: {SEED}")
 	env.unwrapped.set_map_name(world_id)			# for GUI rendering
 	logger.info(str(env.spec.kwargs))
 	# add a wrapper to truncate simulation after episode_max_steps
 	# TimeLimit unneeded, since I handle simulation termination condition in 
-	# the env code using episode_max_steps
+	# the env code using episode_max_steps 
 	#env = TimeLimit(env)		# episode_max_steps specified in register
 	print("[info] Observation space: ", env.observation_space)
 	print("[info] Action space: ", env.action_space)
@@ -99,7 +98,7 @@ def main():
 	print("[info] Actions dictionary: ", action_dict)
 	print("[info] Rewards dictionary: ", reward_dict)
 	print('[info] Location sensor: ', location_sensor)
-	eco_flag = False # economic operation mode				
+	eco_flag = False # economic operation mode	(default)		
 	# a greedy policy stops re-exploring rooms when the agent knows 
 	# that it cleaned all rooms and dirt won't comeback
 	if not dirt_flag and policy_id in [1,2]:	
@@ -108,13 +107,33 @@ def main():
 		if answer == 'y':	
 			eco_flag = True      # to be rational
 	# create and reset the selected cleaning policy
-	policy = Tools.make_policy(policy_id, world_id, env, eco_mode=eco_flag)
+	policy = make_policy(policy_id, world_id, env, eco_mode=eco_flag)
 	policy.reset(seed=SEED)
-
 	env.unwrapped.set_agent_name(policy_id)			# for GUI randering
 	print("[info] Policy: {}".format(policy_id))
 	print('[info] Map ID: {}'.format(world_id))
 	print('[info] dirt comeback: ', dirt_flag)
+
+	# train the QL agent, retrain it or load the qtable for QL agent (when trained)
+	if isinstance(policy, QLearnPolicy):
+		trained = policy.load_qtable()
+		retrain = False
+		if trained:
+			print("[info] the QLearning agent is already trained!")
+			answer = input("[prompt] Would you like to retrain the QL agent? [y/n]")
+			if answer == "y":
+				retrain = True
+		if not trained or retrain:
+			key = input(f"[prompt] Press 'Enter' to re-train '{policy_id}' agent!")
+			if key != "": exit()
+			print(f"[info] Entraînement pour la carte '{world_id}'' sur {TRAIN_EPISODES} épisodes...")
+			env.unwrapped.render_mode = None		# don't render training (default)
+			print("[info] training rendering disabled!")
+			# training episodes can be different then test episodes
+			policy.train_q_learning(env, episodes=TRAIN_EPISODES)
+			env.unwrapped.render_mode = rmode		# restore render mode for QL ag. test
+			# test the trained QL agent
+
 	print('[info] simulating {} episodes...'.format(nbr_episodes))
 	logger.info("[info] map:'{}'' policy:'{}' location_sensor:'{}' eps:{}\
 		 max_steps:{}".format(world_id, policy_id, location_sensor,\
@@ -125,17 +144,8 @@ def main():
 	rewards = np.zeros(nbr_episodes)
 	cleanings = np.zeros(nbr_episodes)
 	travels = np.zeros(nbr_episodes)
-	# simulation main loop
-	if  isinstance(policy, QLearnPolicy):
 
-		EPISODES = 1000
-		if policy.load_qtable():
-			print(f"Q-table chargée pour la carte {world_id}")
-		else:
-			print(f"Entraînement pour la carte {world_id} sur {EPISODES} épisodes...")
-			policy.train_q_learning(env, episodes=EPISODES)
-			print(f"Q-table sauvegardée pour la carte {world_id}")
-
+	# simulation main loop		
 	for eps in range(nbr_episodes):
 		print("[info] episode {}, world configuration: ".format(eps+1))
 		# reset the agent  policy and environment
@@ -145,30 +155,18 @@ def main():
 			format(state['agent'], state['dirt'], wmap))
 		print("step \t action  reward  state(ag_loc,dirt) \t info(dirty, act_done)")		
 		done = False
-		# espisode sim loop
-
+		# espisode loop
 		while not done:
-			#if (policy_id == 3):
-			#	EPISODES=1000
-			#	if policy.load_qtable():
-			#		print(f"Q-table chargée pour la carte {world_id}")
-			#		action = policy.select_action(state)
-			#	else:
-			#		print(f"Entraînement pour la carte {world_id}...")
-			#		policy.train_q_learning(episodes=1000)
-			#		print(f"Q-table sauvegardée pour la carte {world_id}")
-
-			#else:
-				action = policy.select_action(state)
-				state, reward, done, truncated, info = env.step(action)
-				step = info['step']
-				dirty_rooms = info['dirty_spots']
-				action_success = info['action_success']
-				state_tuple = (state['agent'][0], state['agent'][1]) ,\
-				'dirty' if state['dirt'] else 'clean'
-				print(step, ": \t", action_dict[action], "\t", round(reward,2), "\t",\
-				state_tuple, "\t (", dirty_rooms,",", action_success,")")
-				if truncated: break
+			action = policy.select_action(state)
+			state, reward, done, truncated, info = env.step(action)
+			step = info['step']
+			dirty_rooms = info['dirty_spots']
+			action_success = info['action_success']
+			state_tuple = (state['agent'][0], state['agent'][1]) ,\
+			'dirty' if state['dirt'] else 'clean'
+			print(step, ": \t", action_dict[action], "\t", round(reward,2), "\t",\
+			state_tuple, "\t (", dirty_rooms,",", action_success,")")
+			if truncated: break
 
 		#clean = env.get_wrapper_attr('_clean_rooms')
 		rooms = env.get_wrapper_attr('_nbr_rooms')
@@ -192,9 +190,9 @@ def main():
 		print('[info] total travels: ', travel)
 	
 	print("\n[info] simulation done!")
-	print("[info] avg. reward per episode: ", round(sum(rewards)/nbr_episodes, 2))
-	print("[info] avg. cleaning per episode: ", round(sum(cleanings)/nbr_episodes, 1))
-	print("[info] avg. travels per episode: ", round(sum(travels)/nbr_episodes, 1))
+	print("[info] avg. reward: ", round(sum(rewards)/nbr_episodes, 2))
+	print("[info] avg. cleaning: ", round(sum(cleanings)/nbr_episodes, 1))
+	print("[info] avg. travel: ", round(sum(travels)/nbr_episodes, 1))
 	# invite the user to close pygame rendering
 	if env.spec.kwargs['render_mode'] == 'human':
 		input("[prompt] Press any key to close graphic rendering?")
@@ -207,14 +205,15 @@ def main():
 		results = {'reward':rewards, 'cleaned':cleanings, 'travel':travels}
 		Tools.save_results(world_id, policy_id, results)
 	print('[info] to plot results, type: ')
-	print('[info] python vacuum.py -v [world_id]')
+	print('\t python -m tools -v [world_id]')
+	print('or type python -m tools -h for further options!')
 
 def print_help():
 	"""
 	display script's help and examples
 	"""
 	world_ids = Map.get_world_ids()		# from 'maps.py'
-	policies = Tools.get_policies()
+	policies = get_policies()
 	py_help = f"""
 	Usage:  
 		python main.py [-h] map policy [-e episodes episode_maxsteps] [-ls] [-cl]
@@ -234,7 +233,7 @@ def print_help():
 			or some given map.
 			map_nbr:	the id number of the map to display
 
-		python -m vacuum.tools -v [world_id]
+		python -m tools -v [world_id]
 			shows comparative results plots 
 			
 	Examples:
@@ -285,10 +284,10 @@ def parse_commandline_args(args):
 		else:
 			Map.display_maps()
 		exit()
-	policies = Tools.get_policies()
+	policies = get_policies()
 	location_sensor = True              # the location sensor works (default)
 	dirt_flag = True                    # dirt comeback after cleaning (default)
-	policy_n = None					# policy identifier number
+	policy_n = None						# policy identifier number
 	try:
 		# eg. python testme.py 1 1 -e 10 200 -ls -cl
 		if (nbr_args >= 3):
@@ -298,10 +297,10 @@ def parse_commandline_args(args):
 			if int(args[2]) not in range(len(policies)):
 				raise ValueError("policy #{} doesn't exist!".format(args[2]))
 			world_id = world_ids[int(args[1])]
-			policy_n = int(args[2])
+			policy_n = int(args[2])                # policy identifying number
 			for key in policies:
 				if policies[key] == policy_n:
-					policy_id = key
+					policy_id = key                # policy name
 					break
 			nbr_episodes = EPISODES    # default value
 			max_steps = STEPS          # default value

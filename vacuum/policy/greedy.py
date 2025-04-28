@@ -50,7 +50,7 @@ class GreedyPolicy(CleanPolicy):
 	def reset(self, seed=None):
 		"""
 		Reset variables used by the policy.
-		call me after the end of a sim episode.
+		call me after the end of each simulation episode.
 		add further variables needed by agent_program()
 		"""
 		self._visited = 0    			 # number of visited rooms
@@ -62,7 +62,7 @@ class GreedyPolicy(CleanPolicy):
 		self._step_count = 0
 		if not self._seeded or seed is not None:
 			random.seed(seed)
-			#print("[debug] random seeded with ", seed)
+			print("[debug] {__class__.__name__}'s RNG seeded with ", seed)
 			self._seeded = True		
 
 	

@@ -23,10 +23,10 @@ import logging
 
 class GreedyRandomPolicy(CleanPolicy):
 	""" 
-	it's cleaning policy implemented by a random reflex-based agent.
-	The idea is to move arbitrarly when two or more directions are possible.
+	An implementation of a random reflex-based agent.
+	The agent moves arbitrarly when two or more directions are possible.
 	The greedy random policy is, theorically, better then a pure random agent, 
-	less efficient then a greedy policy (a reflex-based with model agent), 
+	less efficient then a greedy policy (a reflex-based agent with a model), 
 	but it's easiest to code and quick fair solution. 
 	"""
 	def __init__(self, world_id, env, eco=False):
@@ -46,7 +46,7 @@ class GreedyRandomPolicy(CleanPolicy):
 		"""
 		if not self._seeded or seed is not None:
 			random.seed(seed)
-			print("[debug] random seeded with ", seed)
+			print(f"[info] {__class__.__name__}'s RNG seeded with {seed}")
 			self._seeded = True
 	
 	def select_action(self, state):
