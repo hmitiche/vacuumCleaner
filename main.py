@@ -134,6 +134,7 @@ def main():
 			env.unwrapped.render_mode = rmode		# restore render mode for QL ag. test
 			# test the trained QL agent
 
+
 	print('[info] simulating {} episodes...'.format(nbr_episodes))
 	logger.info("[info] map:'{}'' policy:'{}' location_sensor:'{}' eps:{}\
 		 max_steps:{}".format(world_id, policy_id, location_sensor,\
