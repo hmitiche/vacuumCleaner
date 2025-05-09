@@ -34,6 +34,7 @@ from vacuum.world import VacuumCleanerWorldEnv
 from vacuum.maps import Map
 from vacuum.policy.helpers import make_policy, get_policies
 from vacuum.policy.qlearning import QLearnPolicy
+from vacuum.policy.q_learning_online import QLearnOnlinePolicy
 import gymnasium as gym
 from gymnasium.wrappers import TimeLimit
 import numpy as np
@@ -109,13 +110,85 @@ def main():
 	# create and reset the selected cleaning policy
 	policy = make_policy(policy_id, world_id, env, eco_mode=eco_flag)
 	policy.reset(seed=SEED)
+
 	env.unwrapped.set_agent_name(policy_id)			# for GUI randering
 	print("[info] Policy: {}".format(policy_id))
 	print('[info] Map ID: {}'.format(world_id))
 	print('[info] dirt comeback: ', dirt_flag)
 
+	from vacuum.policy.q_learning_online import QLearnOnlinePolicy  # déjà importé
+
+	...
+
+	# create and reset the selected cleaning policy
+	policy = make_policy(policy_id, world_id, env, eco_mode=eco_flag)
+	policy.reset(seed=SEED)
+
+	# === Si c'est du Q-learning online ===
+	if isinstance(policy, QLearnOnlinePolicy):
+		print("[info] Mode Q-learning en ligne activé.")
+		env.unwrapped.render_mode = rmode
+		rewards = np.zeros(nbr_episodes)
+		cleanings = np.zeros(nbr_episodes)
+		travels = np.zeros(nbr_episodes)
+
+		key = input("[prompt] Press 'Enter' to start online Q-learning simulation!")
+		if key != "": exit()
+
+		for eps in range(nbr_episodes):
+			print(f"[info] episode {eps + 1}, world configuration:")
+			policy.reset()
+			state = env.reset()[0]
+			done = False
+
+			print("Initial state: (agent coordinates, dirt)=({},{}), world map: \n {}". \
+				  format(state['agent'], state['dirt'], wmap))
+			print("step \t action  reward  state(ag_loc,dirt) \t info(dirty, act_done)")
+
+			while not done:
+				action = policy.act(state)
+				next_state, reward, done, truncated, info = env.step(action)
+				policy.update_qtable(state, action, reward, next_state)
+				state_tuple = (next_state['agent'][0], next_state['agent'][1]), \
+					'dirty' if next_state['dirt'] else 'clean'
+				step = info['step']
+				print(step, ": \t", action_dict[action], "\t", round(reward, 2), "\t",
+					  state_tuple, "\t (", info['dirty_spots'], ",", info['action_success'], ")")
+				state = next_state
+				if truncated: break
+
+			rooms = env.get_wrapper_attr('_nbr_rooms')
+			dirty = info['dirty_spots']
+			clean = rooms - dirty
+			cleaned = env.get_wrapper_attr('_total_cleaned')
+			messed = env.get_wrapper_attr('_total_messed')
+			travel = env.get_wrapper_attr('_total_travel')
+			episode_reward = round(env.get_wrapper_attr('_episode_reward'), 2)
+
+			rewards[eps] = episode_reward
+			cleanings[eps] = cleaned
+			travels[eps] = travel
+
+			if rooms == clean:
+				print("[info] mission accomplished! (all the rooms are clean)")
+			else:
+				print("[info] mission failed! (dirty rooms left)")
+			print("[info] cleaned: {}, messed: {}".format(cleaned, messed))
+			print("[info] total reward: ", episode_reward)
+			print('[info] total travels: ', travel)
+
+		print("\n[info] Online Q-learning simulation done!")
+		print("[info] avg. reward: ", round(sum(rewards) / nbr_episodes, 2))
+		print("[info] avg. cleaning: ", round(sum(cleanings) / nbr_episodes, 1))
+		print("[info] avg. travel: ", round(sum(travels) / nbr_episodes, 1))
+		if env.spec.kwargs['render_mode'] == 'human':
+			input("[prompt] Press any key to close graphic rendering?")
+		env.close()
+		return  # pour éviter de passer à la simulation classique en dessous
+
 	# train the QL agent, retrain it or load the qtable for QL agent (when trained)
 	if isinstance(policy, QLearnPolicy):
+		TRAIN_EPISODES=policy.episodes
 		trained = policy.load_qtable()
 		retrain = False
 		if trained:
@@ -130,7 +203,7 @@ def main():
 			env.unwrapped.render_mode = None		# don't render training (default)
 			print("[info] training rendering disabled!")
 			# training episodes can be different then test episodes
-			policy.train_q_learning(env, episodes=TRAIN_EPISODES)
+			policy.train_q_learning(env)
 			env.unwrapped.render_mode = rmode		# restore render mode for QL ag. test
 			# test the trained QL agent
 

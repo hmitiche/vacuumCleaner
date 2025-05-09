@@ -208,13 +208,13 @@ class VacuumCleanerWorldEnv(gym.Env):
 		#	'none': 0.,			# reward for being idle
 		#}
 		return {
-			'clean': 0.3,
-			'cleaned': 5.0,
+			'clean': 0.5,
+			'cleaned': 10.0,
 			'dirty': -1.0,
-			'suck': -0.5,
-			'move': -0.2,
-			'throw': -3.0,
-			'none': 0.0,
+			'suck': -0.2,
+			'move': -0.1,
+			'throw': -2.0,
+			'none': -2
 		}
 
 	def get_actions(self):

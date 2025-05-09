@@ -9,6 +9,7 @@ March 2024
 """
 #from vacuum.policy.base import RandomPolicy
 from vacuum.policy.base import RandomPolicy				# relative module naming
+from vacuum.policy.q_learning_online import QLearnOnlinePolicy
 from vacuum.policy.qlearning import QLearnPolicy
 from vacuum.policy.greedy import GreedyPolicy
 from vacuum.policy.greedyrandom import GreedyRandomPolicy
@@ -30,6 +31,7 @@ def make_policy(policy_id, world_id, env, eco_mode):
 		case 1: p = GreedyRandomPolicy(world_id, env, eco=eco_mode)
 		case 2:	p = GreedyPolicy(world_id, env, eco=eco_mode)
 		case 3:	p = QLearnPolicy(world_id, env)
+		case 4: p = QLearnOnlinePolicy(world_id,env)
 		case _:
 			raise ValueError(f"Incorrect policy identifier number {policy_id}!")
 			#self.logger.critical("Incorrect policy id!")
@@ -47,5 +49,6 @@ def get_policies():
 		"random": 0,			# pure random, reflex-based agent
 		"greedy-random": 1,		# greedy with some randomness, reflex-based agent
 		"greedy": 2,			# greedy, usually a relex-based agent with model	
-		"q-learning": 3,		# Q-learning, a learning-based agent
+		"q-learning": 3,# Q-learning, a learning-based agent
+		"q-learning online":4,
 	}

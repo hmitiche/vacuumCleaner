@@ -87,6 +87,7 @@ class Tools:
         :param ql_id:   Qlearning agent name
         :param results:  a training results dictionary (keys: reward, cleaned, travel)
         """
+        ql_id=policy_id
         logger = Tools.init_logger(world_id)
         datafile = '{}results_{}.pkl'.format(TRAINING_DATA_PATH, world_id)
         # load previous results, if any
@@ -102,6 +103,9 @@ class Tools:
         else:
             results_dict = None     
         # open/creates results binary file with write access
+
+        os.makedirs(os.path.dirname(datafile), exist_ok=True)
+
         file = open(datafile, 'wb')
         # am I saving the first policy result?
         if results_dict is None:
@@ -243,6 +247,9 @@ class Tools:
             plt.legend(policies, loc='best')
             figure_name = '{}Figure_{}_{}.png'.format(TRAINING_PLOT_PATH, world_id, m)
             print("[info] plot saved to '{}'".format(figure_name))
+
+            os.makedirs('plots/training', exist_ok=True)  # This creates the directory if it doesn't exist
+
             plt.savefig(figure_name)
             plt.show()
             inp = input("[prompt] press 'Enter' to show the next plot ...")
