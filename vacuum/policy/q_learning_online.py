@@ -1,7 +1,7 @@
 from .base import CleanPolicy
 from ..maps import Map
 from ..world import VacuumCleanerWorldEnv
-from tools import Tools
+from tools import *
 import os
 import pickle
 import numpy as np
@@ -16,7 +16,7 @@ class QLearnOnlinePolicy(CleanPolicy):
         self.map_dimension = self.env.unwrapped.map_size
         self.learning_rate = 0.2
         self.discount_factor = 0.95
-        self.epsilon = 0.05  # small epsilon for online learning (exploitation mostly)
+        self.epsilon = 0.2  # small epsilon for online learning (exploitation mostly)
         self.visit_counts = {}  # pour suivre le nombre de visites par position
 
         # initialiser Q-table
@@ -37,18 +37,28 @@ class QLearnOnlinePolicy(CleanPolicy):
         return {"agent": np.array([x, y]), "dirt": z}
 
     def load_qtable(self):
+        """
+        Chargement de la Q-table pour le mode Q-learning online.
+        Retourne True si la Q-table a été chargée avec succès, sinon False.
+        """
         filename = f"data/qlearning_online_table_map_{self.world_id}.pkl"
         if os.path.exists(filename):
             with open(filename, 'rb') as f:
                 self.q_table = pickle.load(f)
                 print(f"[info] Q-table (online) chargée pour la carte '{self.world_id}'")
+            self.trained = True
+            return True
+        return False
 
     def save_qtable(self):
+        """
+        Sauvegarde de la Q-table pour le mode Q-learning online.
+        """
         filename = f"data/qlearning_online_table_map_{self.world_id}.pkl"
         os.makedirs(os.path.dirname(filename), exist_ok=True)
         with open(filename, 'wb') as f:
             pickle.dump(self.q_table, f)
-            print(f"[info] Q-table (online) sauvegardée pour la carte '{self.world_id}'")
+            print(f"[info] Q-table (online) sauvegardée dans '{filename}'")
 
     def select_action(self, state):
         state_index = self.encode_state(state)
@@ -74,23 +84,6 @@ class QLearnOnlinePolicy(CleanPolicy):
         Cette méthode est appelée automatiquement à chaque pas de simulation.
         Elle sélectionne une action et met à jour la Q-table.
         """
-        action = self.select_action(observation)
-        old_obs = observation.copy()
+        return self.select_action(observation)
 
-        # Exécute l'action
-        new_obs, reward, terminated, truncated, info = self.env.step(action)
-
-        # Calcule la position de l'agent après déplacement
-        pos_tuple = tuple(new_obs["agent"])
-        if pos_tuple not in self.visit_counts:
-            self.visit_counts[pos_tuple] = 1
-            reward += 2.0 # nouvelle case visitée
-        else:
-            self.visit_counts[pos_tuple] += 1
-            reward -= 0.05 * np.log(self.visit_counts[pos_tuple])  # revisitée
-
-        # Mise à jour de la Q-table
-        self.update_qtable(old_obs, action, reward, new_obs)
-
-        return action
 

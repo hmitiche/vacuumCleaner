@@ -1,7 +1,7 @@
 from .base import CleanPolicy
 from ..maps import Map
 from ..world import VacuumCleanerWorldEnv
-from tools import Tools
+
 import os
 import pickle
 import numpy as np
@@ -98,7 +98,9 @@ class QLearnPolicy(CleanPolicy):
                          epsilon=1.0, epsilon_min=0.05, epsilon_decay_rate=0.001):
 
         # compute the number of QL table entries
+        from tools import Tools
 
+        self.total_rooms = self.env.unwrapped.count_rooms(clean=False)
         num_states = self.map_dimension * self.map_dimension * 2  # 2 = a room is dirty or clean
         self.q_table = np.zeros((num_states, env.action_space.n))  # init empty QL table
         self._episode_reward = 0
@@ -130,9 +132,11 @@ class QLearnPolicy(CleanPolicy):
                 if visit_counts[new_position] == 1:
                     reward += 2.0
                 else:
-                    reward -= 0.2 * np.log(visit_counts[new_position])
+                    reward -= 1.0 * np.log(visit_counts[new_position])
 
-                episode_reward += reward
+
+
+                #episode_reward += reward
 
                 # Mise à jour Q-table
                 new_state_index = self.encode_state(new_obs)
@@ -142,6 +146,7 @@ class QLearnPolicy(CleanPolicy):
                 )
 
                 # Mise à jour état
+                episode_reward += reward
                 state_index = new_state_index
                 obs = new_obs
 

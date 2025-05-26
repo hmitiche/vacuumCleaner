@@ -8,6 +8,7 @@ March 2024
 """
 
 from constants import *
+from constants import SIMULATION_DATA_PATH, SIMULATION_PLOT_PATH
 from vacuum.maps import Map
 #from vacuum.policy.helpers import get_policies
 import vacuum.policy.helpers as helper
@@ -113,7 +114,47 @@ class Tools:
         results_dict[ql_id] = results  # update old results if any
         pickle.dump(results_dict, file)
         print("[info] {} training results for {} map saved in {}".format(ql_id, world_id, datafile))
-        file.close()    
+        file.close()
+
+
+    def save_simulation_online_results(world_id, policy_id, results):
+        """
+        Saves QL online results (total_reward, rooms_cleaned, total_travel per episode)
+        to a file. Erase existing results if any.
+        :param world_id:    map identifier
+        :param ql_online_id:   Qlearning online agent name
+        :param results:  a training results dictionary (keys: reward, cleaned, travel)
+        """
+        ql_online_id=policy_id
+        logger = Tools.init_logger(world_id)
+        datafile = '{}results_online_{}.pkl'.format(SIMULATION_DATA_PATH, world_id)
+        # load previous results, if any
+        if os.path.exists(datafile):
+            try:
+                with open(datafile, 'rb') as file:
+                    results_dict = pickle.load(file)
+                    file.close()
+            except EOFError:
+                print("[warning] File '{}'' is empty or corrupted!".format(datafile))
+                results_dict = {}
+                file.close()
+        else:
+            results_dict = None
+        # open/creates results binary file with write access
+
+        os.makedirs(os.path.dirname(datafile), exist_ok=True)
+
+        file = open(datafile, 'wb')
+        # am I saving the first policy result?
+        if results_dict is None:
+            results_dict = dict({})
+        results_dict[ql_online_id] = results  # update old results if any
+        pickle.dump(results_dict, file)
+        print("[info] {} Simulation online  results for {} map saved in {}".format(ql_online_id, world_id, datafile))
+        file.close()
+
+
+
 
     @staticmethod
     def plot_results(world_id, scattered=False, animated=False):
@@ -255,6 +296,68 @@ class Tools:
             inp = input("[prompt] press 'Enter' to show the next plot ...")
             if inp != "": exit()
 
+
+
+
+
+    def plot_simulation_online_results(word_id, policy_id="q-learning online", scattered=False):
+        """
+        Plot QL simulation online results: number of cleaned rooms, total reward
+        and travel over episodes, separatedly.
+        :param world_id: map indetifying number
+        :param policy_id: learning online policy identifer
+        """
+        logger = Tools.init_logger(world_id)
+        datafile = '{}results_online_{}.pkl'.format(SIMULATION_DATA_PATH, world_id)
+        if os.path.exists(datafile):
+            with open(datafile, 'rb') as file:
+                data = pickle.load(file)
+        else:
+            raise FileNotFoundError(f"Couldn't find file '{datafile}'")
+            #logger.error("{} not found! nothing plotted".format(datafile))
+            exit()
+        if data == None or data == {}:
+            logger.error(f"No results in file: '{datafile}'")
+            raise ValueError()
+            return
+        policies = list(data.keys())
+        #logger.info(policies)
+        print(f"[debug] learning policies: {policies}")
+        # I assume policies results ve the same metrics
+        # number of graphs (axes) is the number of policies
+        metrics = list(data[policies[0]].keys())    # results metrics names
+        print(f"[debug] metrics: {metrics}")
+        #logger.info(metrics)
+        nbr_plots = len(metrics)
+        eps = len(data[policies[0]][metrics[0]])    # nbr episodes
+        print(f"episodes: {eps}")
+        x = [i for i in range(1, eps+1)]
+        colors = ["blue", "orange", "green", "black"]
+        y = [[[d for d in data[p][m]] for p in policies] for m in metrics]
+        for i in range(nbr_plots):
+            plt.clf()
+            m = metrics[i]
+            plt.title(f"simulation online on Map '{world_id}': {m}")
+            plt.xlabel('episode')
+            plt.ylabel(metrics[i])
+            plt.xlim(0,eps+2)
+            # scatter plot
+            for j in range(len(policies)):
+                if not scattered:
+                    plt.plot(x, y[i][j], label=policies[j])
+                else:
+                    plt.scatter(x, y[i][j], label=policies[j])
+            plt.legend(policies, loc='best')
+            figure_name = '{}Figure_{}_{}.png'.format(SIMULATION_PLOT_PATH, world_id, m)
+            print("[info] plot saved to '{}'".format(figure_name))
+
+            os.makedirs('plots/simulation_online', exist_ok=True)  # This creates the directory if it doesn't exist
+
+            plt.savefig(figure_name)
+            plt.show()
+            inp = input("[prompt] press 'Enter' to show the next plot ...")
+            if inp != "": exit()
+
     # plot results using subplots of all the metrics
     #@fix_me: I think it's not working, it's not useful sofar.  
     @staticmethod
@@ -344,7 +447,11 @@ if __name__ == '__main__':
             python -m tools -t world_id policy_id
                 display a plot of QL training [policy_id] performance over episodes 
                 for map [world_id]
-
+            
+            
+            python -m tools -o world_id
+                show plots of online Q-learning simulation results 
+                for the given world_id
     Examples:
         python -m tools -v vacuum-2rooms-v0
             plot results (rewards, cleaned, travels, ...) 
@@ -352,7 +459,11 @@ if __name__ == '__main__':
             on map 'vacuum-2rooms-v0'
 
         python -m tools -v vacuum-2rooms-v0 -s -a
-            genearte an animated plot using scattered dots  
+            genearte an animated plot using scattered dots
+            
+        
+        python -m tools -o vacuum-2rooms-v0
+            plot results of online Q-learning on that map  
     """
     args = sys.argv
     narg = len(args)
@@ -386,6 +497,15 @@ if __name__ == '__main__':
         else: anim= False
         Tools.plot_results(world_id, scatter, anim)
         exit()
+
+    if narg == 3 and args[1] == '-o':
+        policy_id="q-learning online"
+        world_id = args[2]
+        assert world_id in Map.get_world_ids(), "Please enter un valid map id!"
+        Tools.plot_simulation_online_results(world_id,policy_id)
+        exit()
+
+
     else:
         print("[error] command incorrect!")
         print(help_msg)

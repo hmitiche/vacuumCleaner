@@ -212,7 +212,7 @@ class VacuumCleanerWorldEnv(gym.Env):
 			'cleaned': 10.0,
 			'dirty': -1.0,
 			'suck': -0.2,
-			'move': -0.1,
+			'move': -0.3,
 			'throw': -2.0,
 			'none': -2
 		}
