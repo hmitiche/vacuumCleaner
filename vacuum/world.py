@@ -198,14 +198,23 @@ class VacuumCleanerWorldEnv(gym.Env):
 		necessity). Sucking dirt may fail (Murphy law) and the robot may throw 
 		dirt and mess a clean room, this is penalized. The rewards are deterministic.
 		"""
-		return{
-			'clean': .2,		# reward for a clean room
-			'cleaned': 3,		# reward for cleaning a dirty room
-			'dirty': -.7,		# penalty for a dirty room 
-			'suck': -1,			# penalty of noise/power consumption
-			'move': -.5,		# penalty of noise/power consumption
-			'throw': -2.,		# penalty for throwing dirt (murphy law) 
-			'none': 0.,			# reward for being idle
+		#return{
+		#	'clean': .2,		# reward for a clean room
+		#	'cleaned': 3,		# reward for cleaning a dirty room
+		#	'dirty': -.7,		# penalty for a dirty room
+		#	'suck': -1,			# penalty of noise/power consumption
+		#	'move': -.5,		# penalty of noise/power consumption
+		#	'throw': -2.,		# penalty for throwing dirt (murphy law)
+		#	'none': 0.,			# reward for being idle
+		#}
+		return {
+			'clean': 0.5,
+			'cleaned': 10.0,
+			'dirty': -1.0,
+			'suck': -0.2,
+			'move': -0.3,
+			'throw': -2.0,
+			'none': -2
 		}
 
 	def get_actions(self):

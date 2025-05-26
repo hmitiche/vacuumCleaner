@@ -10,6 +10,8 @@ DATA_PATH = 'data/'
 PLOT_PATH = 'plots/'
 TRAINING_DATA_PATH = DATA_PATH + "training/"
 TRAINING_PLOT_PATH = PLOT_PATH + "training/"
+SIMULATION_DATA_PATH = DATA_PATH + "simulation_online"
+SIMULATION_PLOT_PATH =PLOT_PATH + "simulation_online"
 
 # gym environment constants
 EPISODES = 1        		  # number of episodes (default value)

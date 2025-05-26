@@ -32,8 +32,11 @@ __status__ = "beta-version"
 from constants import *
 from vacuum.world import VacuumCleanerWorldEnv
 from vacuum.maps import Map
+from tools import *
+from termination_wrapper import TerminationWrapper
 from vacuum.policy.helpers import make_policy, get_policies
 from vacuum.policy.qlearning import QLearnPolicy
+from vacuum.policy.q_learning_online import QLearnOnlinePolicy
 import gymnasium as gym
 from gymnasium.wrappers import TimeLimit
 import numpy as np
@@ -72,7 +75,7 @@ def main():
 		 entry_point="vacuum.world:VacuumCleanerWorldEnv",
 		 #episode_max_steps=300,		# the duration the vaccum cleaner robot is powered on
 		 # env args default values
-		 kwargs={'grid':None, 'dirt_comeback':dirt_flag, 'dirt_proba':0.09, 'murphy_proba':0.11, 
+		 kwargs={'grid':None, 'dirt_comeback':dirt_flag, 'dirt_proba':0.09, 'murphy_proba':0.0,
 		 'location_sensor':location_sensor, 'episode_max_steps':max_steps, 'render_mode':rmode}
 	)
 	# converted the selected vacuum map to 2D numpy array
@@ -81,6 +84,8 @@ def main():
 	#env = gym.make('VacuumCleanerWorld-v0', grid=wmap, render_mode='console')
 	# create the gym env.
 	env = gym.make('VacuumCleanerWorld-v0', grid=wmap)
+	env = TerminationWrapper(env)  # Ajout du wrapper ici
+
 	# seed the env, 
 	# uncomment the next line for reproducible results and comparison
 	env.reset(seed=SEED)
@@ -109,13 +114,123 @@ def main():
 	# create and reset the selected cleaning policy
 	policy = make_policy(policy_id, world_id, env, eco_mode=eco_flag)
 	policy.reset(seed=SEED)
+
 	env.unwrapped.set_agent_name(policy_id)			# for GUI randering
 	print("[info] Policy: {}".format(policy_id))
 	print('[info] Map ID: {}'.format(world_id))
 	print('[info] dirt comeback: ', dirt_flag)
 
+
+	...
+
+	# create and reset the selected cleaning policy
+	policy = make_policy(policy_id, world_id, env, eco_mode=eco_flag)
+	policy.reset(seed=SEED)
+
+	# === Si c'est du Q-learning online ===
+	if isinstance(policy, QLearnOnlinePolicy):
+		print("[info] Mode Q-learning en ligne activé.")
+		env.unwrapped.render_mode = rmode
+
+		nbr_episodes = 10
+		rewards = np.zeros(nbr_episodes)
+		cleanings = np.zeros(nbr_episodes)
+		travels = np.zeros(nbr_episodes)
+
+		# Charger Q-table si elle existe
+		if policy.load_qtable():
+			print("[info] Q-table chargée avec succès.")
+		else:
+			print("[info] Aucune Q-table trouvée, apprentissage à partir de zéro.")
+
+		key = input("[prompt] Press 'Enter' to start online Q-learning simulation!")
+		if key != "": exit()
+
+		for eps in range(nbr_episodes):
+			print(f"[info] episode {eps+1}, world configuration:")
+			policy.reset()
+			state = env.reset()[0]
+			done = False
+
+			print("Initial state: (agent coordinates, dirt)=({},{}), world map: \n {}". \
+				  format(state['agent'], state['dirt'], wmap))
+			print("step \t action  reward  state(ag_loc,dirt) \t info(dirty, act_done)")
+			episode_reward=0
+			while not done:
+				action = policy.act(state)  # retourne juste l’action
+				next_state, reward, done, truncated, info = env.step(action)
+
+
+
+				# Gestion des récompenses supplémentaires :
+				pos_tuple = tuple(next_state["agent"])
+				if pos_tuple not in policy.visit_counts:
+					policy.visit_counts[pos_tuple] = 1
+					reward += 2.0
+				else:
+					policy.visit_counts[pos_tuple] += 1
+					reward -= 1.0 * np.log(policy.visit_counts[pos_tuple])
+
+
+				episode_reward += reward
+				policy.update_qtable(state, action, reward, next_state)
+
+
+				state_tuple = (next_state['agent'][0], next_state['agent'][1]), \
+					'dirty' if next_state['dirt'] else 'clean'
+				step = info['step']
+				print(step, ": \t", action_dict[action], "\t", round(reward, 2), "\t",
+					  state_tuple, "\t (", info['dirty_spots'], ",", info['action_success'], ")")
+				state = next_state
+				if truncated: break
+
+			rooms = env.get_wrapper_attr('_nbr_rooms')
+			dirty = info['dirty_spots']
+			clean = rooms - dirty
+			cleaned = env.get_wrapper_attr('_total_cleaned')
+			messed = env.get_wrapper_attr('_total_messed')
+			travel = env.get_wrapper_attr('_total_travel')
+			episode_reward = round(env.get_wrapper_attr('_episode_reward'), 2)
+
+			rewards[eps] = episode_reward
+			cleanings[eps] = cleaned
+			travels[eps] = travel
+
+			if rooms == clean:
+				print("[info] mission accomplished! (all the rooms are clean)")
+			else:
+				print("[info] mission failed! (dirty rooms left)")
+			print("[info] cleaned: {}, messed: {}".format(cleaned, messed))
+			print("[info] total reward: ", episode_reward)
+			print('[info] total travels: ', travel)
+
+		print("\n[info] Online Q-learning simulation done!")
+		print("[info] avg. reward: ", round(sum(rewards) / nbr_episodes, 2))
+		print("[info] avg. cleaning: ", round(sum(cleanings) / nbr_episodes, 1))
+		print("[info] avg. travel: ", round(sum(travels) / nbr_episodes, 1))
+
+		if env.spec.kwargs['render_mode'] == 'human':
+			input("[prompt] Press any key to close graphic rendering?")
+
+		env.close()
+
+		# Demander à l'utilisateur s'il veut sauvegarder les résultats et la Q-table
+		if input("[prompt] save results and Q-table? [y/n]") == 'y':
+			results = {'reward': rewards, 'cleaned': cleanings, 'travel': travels}
+			Tools.save_simulation_online_results(world_id, policy_id, results)
+			policy.save_qtable()  # sauvegarder la Q-table
+			print("[info] Q-table sauvegardée avec succès.")
+		else:
+			print("[info] Q-table non sauvegardée.")
+
+		print('[info] to plot results, type: ')
+		print('\t python -m tools -v [world_id]')
+		print('or type python -m tools -h for further options!')
+		return  # pour éviter de passer à la simulation classique en dessous
+
 	# train the QL agent, retrain it or load the qtable for QL agent (when trained)
 	if isinstance(policy, QLearnPolicy):
+		TRAIN_EPISODES=policy.episodes
 		trained = policy.load_qtable()
 		retrain = False
 		if trained:
@@ -124,16 +239,17 @@ def main():
 			if answer == "y":
 				retrain = True
 		if not trained or retrain:
-			key = input(f"[prompt] Press 'Enter' to re-train '{policy_id}' agent!")
+			key = input(f"[prompt] Press 'Enter' to train '{policy_id}' agent!")
 			if key != "": exit()
 			print(f"[info] Entraînement pour la carte '{world_id}'' sur {TRAIN_EPISODES} épisodes...")
 			env.unwrapped.render_mode = None		# don't render training (default)
 			print("[info] training rendering disabled!")
 			# training episodes can be different then test episodes
-			policy.train_q_learning(env, episodes=TRAIN_EPISODES)
+			policy.train_q_learning(env)
 			env.unwrapped.render_mode = rmode		# restore render mode for QL ag. test
 			# test the trained QL agent
 
+	#nbr_episodes=10
 	print('[info] simulating {} episodes...'.format(nbr_episodes))
 	logger.info("[info] map:'{}'' policy:'{}' location_sensor:'{}' eps:{}\
 		 max_steps:{}".format(world_id, policy_id, location_sensor,\
@@ -199,8 +315,8 @@ def main():
 	env.close()
 	# save results for comparison or reports
 	# only when the simulation has a fair number of episodes
-	if nbr_episodes<50:
-		exit()
+	#if nbr_episodes<50:
+	#	exit()
 	if input("[prompt] save results? [y/n]") == 'y':
 		results = {'reward':rewards, 'cleaned':cleanings, 'travel':travels}
 		Tools.save_results(world_id, policy_id, results)
