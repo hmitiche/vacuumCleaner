@@ -1,0 +1,104 @@
+INFO:vacuum.world:env reset:
+INFO:vacuum.world:rooms 4, clean 1, dirty 3
+INFO:vacuum.world:agent start location [0 0]
+INFO:vacuum.world:obs: [0 0],True
+INFO:__main__:{'grid': array([['x', '.', '#'],
+       ['#', 'x', 'x'],
+       ['#', '#', '#']], dtype='<U1'), 'dirt_comeback': False, 'dirt_proba': 0.09, 'murphy_proba': 0.11, 'location_sensor': True, 'episode_max_steps': 150, 'render_mode': 'human'}
+INFO:__main__:[info] map:'vacuum-4rooms-v1'' policy:'greedy' location_sensor:'True' eps:1		 max_steps:150
+INFO:vacuum.world:env reset:
+INFO:vacuum.world:rooms 4, clean 0, dirty 4
+INFO:vacuum.world:agent start location [0 0]
+INFO:vacuum.world:obs: [0 0],True
+INFO:vacuum.world:action: 'suck'
+INFO:vacuum.world:action 'suck' succeeded!
+INFO:vacuum.world:room (0, 0) is cleaned!
+INFO:vacuum.world:obs: [0 0],False
+INFO:vacuum.world:action: 'right'
+INFO:vacuum.world:action 'right' succeeded!
+INFO:vacuum.world:agent moved to (1,0)
+INFO:vacuum.world:obs: [1 0],True
+INFO:vacuum.world:action: 'suck'
+INFO:vacuum.world:action 'suck' succeeded!
+INFO:vacuum.world:room (1, 0) is cleaned!
+INFO:vacuum.world:obs: [1 0],False
+INFO:vacuum.world:action: 'down'
+INFO:vacuum.world:action 'down' succeeded!
+INFO:vacuum.world:agent moved to (1,1)
+INFO:vacuum.world:obs: [1 1],True
+INFO:vacuum.world:action: 'suck'
+INFO:vacuum.world:action 'suck' succeeded!
+INFO:vacuum.world:room (1, 1) is cleaned!
+INFO:vacuum.world:obs: [1 1],False
+INFO:vacuum.world:action: 'right'
+INFO:vacuum.world:action 'right' succeeded!
+INFO:vacuum.world:agent moved to (2,1)
+INFO:vacuum.world:obs: [2 1],True
+INFO:vacuum.world:action: 'suck'
+INFO:vacuum.world:action 'suck' failed!
+INFO:vacuum.world:room (2, 1) remains dirty!
+INFO:vacuum.world:obs: [2 1],True
+INFO:vacuum.world:action: 'suck'
+INFO:vacuum.world:action 'suck' succeeded!
+INFO:vacuum.world:room (2, 1) is cleaned!
+INFO:vacuum.world:obs: [2 1],False
+INFO:vacuum.world:action: 'left'
+INFO:vacuum.world:action 'left' failed!
+INFO:vacuum.world:movement failed! (Murphy law) :(
+INFO:vacuum.world:obs: [2 1],False
+INFO:vacuum.world:action: 'left'
+INFO:vacuum.world:action 'left' succeeded!
+INFO:vacuum.world:agent moved to (1,1)
+INFO:vacuum.world:obs: [1 1],False
+INFO:vacuum.world:action: 'up'
+INFO:vacuum.world:action 'up' succeeded!
+INFO:vacuum.world:agent moved to (1,0)
+INFO:vacuum.world:obs: [1 0],False
+INFO:vacuum.world:action: 'left'
+INFO:vacuum.world:action 'left' succeeded!
+INFO:vacuum.world:agent moved to (0,0)
+INFO:vacuum.world:obs: [0 0],False
+INFO:vacuum.world:action: 'right'
+INFO:vacuum.world:action 'right' succeeded!
+INFO:vacuum.world:agent moved to (1,0)
+INFO:vacuum.world:obs: [1 0],False
+INFO:vacuum.world:action: 'down'
+INFO:vacuum.world:action 'down' succeeded!
+INFO:vacuum.world:agent moved to (1,1)
+INFO:vacuum.world:obs: [1 1],False
+INFO:vacuum.world:action: 'right'
+INFO:vacuum.world:action 'right' succeeded!
+INFO:vacuum.world:agent moved to (2,1)
+INFO:vacuum.world:obs: [2 1],False
+INFO:vacuum.world:action: 'left'
+INFO:vacuum.world:action 'left' failed!
+INFO:vacuum.world:movement failed! (Murphy law) :(
+INFO:vacuum.world:obs: [2 1],False
+INFO:vacuum.world:action: 'left'
+INFO:vacuum.world:action 'left' succeeded!
+INFO:vacuum.world:agent moved to (1,1)
+INFO:vacuum.world:obs: [1 1],False
+INFO:vacuum.world:action: 'up'
+INFO:vacuum.world:action 'up' succeeded!
+INFO:vacuum.world:agent moved to (1,0)
+INFO:vacuum.world:obs: [1 0],False
+INFO:vacuum.world:action: 'left'
+INFO:vacuum.world:action 'left' succeeded!
+INFO:vacuum.world:agent moved to (0,0)
+INFO:vacuum.world:obs: [0 0],False
+INFO:vacuum.world:action: 'right'
+INFO:vacuum.world:action 'right' succeeded!
+INFO:vacuum.world:agent moved to (1,0)
+INFO:vacuum.world:obs: [1 0],False
+INFO:vacuum.world:action: 'down'
+INFO:vacuum.world:action 'down' succeeded!
+INFO:vacuum.world:agent moved to (1,1)
+INFO:vacuum.world:obs: [1 1],False
+INFO:vacuum.world:action: 'right'
+INFO:vacuum.world:action 'right' succeeded!
+INFO:vacuum.world:agent moved to (2,1)
+INFO:vacuum.world:obs: [2 1],False
+INFO:vacuum.world:action: 'left'
+INFO:vacuum.world:action 'left' succeeded!
+INFO:vacuum.world:agent moved to (1,1)
+INFO:vacuum.world:obs: [1 1],False

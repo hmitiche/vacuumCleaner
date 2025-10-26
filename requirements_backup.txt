@@ -1,0 +1,9 @@
+# required python packages
+gym
+numpy
+matplotlib
+pygame
+seaborn
+pickle
+tqdm
+pprint

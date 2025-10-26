@@ -29,17 +29,25 @@ class CleanPolicy(ABC):
 	The Base class to define a vacuum cleaning strategy.
 	It can't be instantiatied.
 	"""
-	def __init__(self, policy_id, world_id, env):
-		self.policy_id = policy_id
+	def __init__(self, policy_id, world_id, env, eco_mode=False):
+		"""
+		The eco_mode is a flag that tells the agent that dirt 
+		won't comeback. The agent can then shift to economic mode 
+		after visiting (cleaning) all rooms.
+		"""
+		self.policy_id = policy_id			# policy id name
 		self.world_id = world_id
 		self.env = env
+		self.eco_mode = eco_mode
+		#@CHECK: remove me later
+		assert world_id == self.env.unwrapped.map_name
 		#self._action_space = env.action_space
 		self._action_dict = self._get_action_dict()
 		self._location_sensor = env.unwrapped.location_sensor
 		logfile = f"{LOG_PATH}{world_id}-{policy_id}.log"
-		#if os.path.isfile(logfile):
-		#	os.remove(logfile)
-
+		if os.path.isfile(logfile):
+			# remove file to avoid large jammed files
+			os.remove(logfile)
 		logging.basicConfig(filename=logfile, level=logging.DEBUG)
 		self.logger = logging.getLogger(__name__)
 		self._seeded = False
@@ -58,7 +66,9 @@ class CleanPolicy(ABC):
 	def _get_action_dict(self):
 		"""
 		Returns the set of actions the vacuum cleaner can do, 
-		as dictionary {action_name: action_number} 
+		as a dictionary {action_name: action_number}.
+		@IMPROVE_ME: rather just inverse the dictionary action of 
+		VacuumCleanWorld. Better choice for maintenance.
 		"""	
 		return{
 			"none":0, "suck":1, 
@@ -78,6 +88,8 @@ class CleanPolicy(ABC):
 """
 A cleaning policy which is merely random.
 """
+MY_NAME = "random"
+@register_policy(MY_NAME)
 class RandomPolicy(CleanPolicy):
 	"""
 	Pickup a random action at each step. 
@@ -89,8 +101,8 @@ class RandomPolicy(CleanPolicy):
 					  generator used by the policy. can be that of 
 					  the env?!
 	"""
-	def __init__(self, env):
-		self.policy_id = "random"
+	def __init__(self, world_id, env):
+		super().__init__(MY_NAME, world_id, env)
 		self.nbr_actions = env.action_space.n
 		self._rng = None # random number generator
 		self._seeded = False

@@ -26,6 +26,19 @@ class Tools:
     """ 
     logger = None
     @staticmethod
+    def print_matrix(matrix, name="Matrix"):
+        """
+        Dislay a 2D matrix in a readble shape
+        Parameters:
+            maxtrix (np.array(shape=2)): the 2D array
+            name (str): the matrix name
+        """
+        print(f"{name} (shape={matrix.shape}):")
+        for row in matrix:
+            print("  " + "  ".join(f"{val:>4}" for val in row))
+        print()
+
+    @staticmethod
     def str_list(l, freq=None, margin=1, sep=", "):
         """
         Converts a list to a string with some formating for console output. 
@@ -84,7 +97,7 @@ class Tools:
         Saves QL training results (total_reward, rooms_cleaned, total_travel per episode)
         to a file. Erase existing results if any.
         :param world_id:    map identifier
-        :param ql_id:   Qlearning agent name
+        :param policy_id:   Qlearning agent name
         :param results:  a training results dictionary (keys: reward, cleaned, travel)
         """
         logger = Tools.init_logger(world_id)
@@ -106,9 +119,9 @@ class Tools:
         # am I saving the first policy result?
         if results_dict is None:
             results_dict = dict({})     
-        results_dict[ql_id] = results  # update old results if any
+        results_dict[policy_id] = results  # update old results if any
         pickle.dump(results_dict, file)
-        print("[info] {} training results for {} map saved in {}".format(ql_id, world_id, datafile))
+        print("[info] {} training results for {} map saved in {}".format(policy_id, world_id, datafile))
         file.close()    
 
     @staticmethod
@@ -309,6 +322,23 @@ class Tools:
         input("press any key to close the plot")
 
     @classmethod
+    def plot_epsilon(self, episodes, epsilon_log):
+        """
+        Plots epsilon decay during QL training.
+        Parameters:
+            epsiodes (array(1)): 
+            epsilon_log: epsilon values
+        """ 
+        plt.figure(figsize=(10, 5))
+        plt.plot(range(episodes), epsilon_log, label="Epsilon")
+        plt.xlabel("Episode")
+        plt.ylabel("Epsilon Value")
+        plt.title("Epsilon Decay over Episodes")
+        plt.grid(True)
+        plt.legend()
+        plt.show()    
+
+    @classmethod
     def init_logger(cls, world_id):
         if cls.logger is not None:
             return cls.logger
@@ -320,6 +350,32 @@ class Tools:
         logging.basicConfig(filename=logfile, level=logging.DEBUG)
         cls.logger = logging.getLogger(__name__)
         return cls.logger
+
+    def plot_visit_heatmap(self, visits, title="Room Visit Count Heatmap"):
+        """
+        Visualize the room visits count as a heatmap.
+        Helpful for debugging agent map exploration.
+        Parameters:
+            visits (array(2)): number of visits to rooms (x,y)
+            title (str): plot title
+        """
+        plt.figure(figsize=(7, 7))
+        ax = sns.heatmap(
+            np.transpose(visits),
+            annot=True,
+            fmt=".0f",
+            cmap="YlGnBu",
+            square=True,
+            cbar=True,
+            linewidths=0.5,
+            linecolor="gray"
+        )
+        ax.set_title(title)
+        #ax.invert_yaxis()  # optional: match environment top-down view
+        plt.xlabel("X")
+        plt.ylabel("Y")
+        plt.tight_layout()
+        plt.show()
 
 # command entry program
 if __name__ == '__main__':

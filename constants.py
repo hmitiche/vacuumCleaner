@@ -13,6 +13,6 @@ TRAINING_PLOT_PATH = PLOT_PATH + "training/"
 
 # gym environment constants
 EPISODES = 1        		  # number of episodes (default value)
-TRAIN_EPISODES = 1000		  # number of training episodes for QLearning policy
-STEPS = 200                   # number of steps in epsiode (default value)
+TRAIN_EPISODES = 1000
+STEPS = 150                   # number of steps in an epsiode (default value)
 SEED = 0                      # RNG seed (default value), for env dynamics replication

@@ -1,0 +1,20 @@
+
+# Ignore the logs directory
+vacuum/__pycache__/
+vacuum/policy/__pycache__/
+logs/
+docs/
+chatgpt_code/
+vacuumclean.egg-info/
+
+# OS and IDE junk
+.DS_Store
+
+
+# ignore python cache
+__pycache__/
+*.pyc
+
+# Build artifacts
+dist/
+build/

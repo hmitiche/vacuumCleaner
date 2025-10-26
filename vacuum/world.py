@@ -8,7 +8,6 @@ simulate intelligent agents doing vacuum cleaning.
 The problem is described in my AI class for CS 
 undergraduates, here (the link): 
 
-
 author: Hakim Mitiche
 date: March 2024
 update: March 2025
@@ -28,13 +27,14 @@ import collections
 import logging
 import time
 
+GYM_NAME = "VacuumCleanerWorld-v0"
 LOG_FILENAME = 'logfile.log'
 
 # Murphy law: "anything that can go wrong will go wrong
 # anything that can't go wrong will go wrong".
 # We applied the law for all vacuum actions, except 'none'
 
-WRONG_PROBA = 0.17	# default value for 'self.murphy_proba'
+WRONG_PROBA = 0.17		# default value for 'self.murphy_proba'
 INIT_DIRT_PROBA = 0.5	# probability that a room is dirty initally
 
 # RGB colors 
@@ -55,7 +55,7 @@ class VacuumCleanerWorldEnv(gym.Env):
 	Attributes:
 	-----------
 	private:	
-		map : np.array()
+		map : np.array() dtype=int16
 			vacuum cleaner world square map of size 'size', 4 * 4 at most.
 		dirt_comback : boolean
 			does dirt comeback to rooms?
@@ -83,7 +83,7 @@ class VacuumCleanerWorldEnv(gym.Env):
 		location_sensor, episode_max_steps, render_mode):
 		super(VacuumCleanerWorldEnv, self).__init__()
 		self.map = None					# world map current configuration (matrix)
-		self.init_map = grid    		# world initial configuration 
+		self.init_map = grid    		# world initial configuration
 		self.map_name = "house"			# default map name
 		self.agent_name = "vaccum cleaner robot"
 		self.map_size = (grid.shape)[0] 	# the map (square) 1st dimension 
@@ -96,6 +96,7 @@ class VacuumCleanerWorldEnv(gym.Env):
 		self.location_sensor = location_sensor
 		self.episode_max_steps = episode_max_steps	# to truncate simulation (if necessary)
 		self.render_mode = render_mode
+		self.nbr_rooms = self.count_rooms()
 		self._episode = None		# current episode number
 		self._step = None			# current episode step number
 		self._episode_reward = None		# reward collected during the episode
@@ -104,14 +105,17 @@ class VacuumCleanerWorldEnv(gym.Env):
 		self._action_success = None		# flag for whether the action is sucessfull
 		# 'suck' effect on current room: 'cleaned', 'messed' or 'nothing'
 		self._suck_outcome = None	
-		# defines the observation space: dictionary of the agent's locations and 
-		# dirt flag. The location is encoded as an element 
+		# defines the observation space: a dictionary of the agent's locations, 
+		# and dirt flag and number of visits to current room. 
+		# The location is encoded as an element 
 		# of {0, ..., `map_size-1`}^2, i.e. MultiDiscrete([size, size]).
 		# dirt is encoded as 1 (present) or 0 (abscent)
+		# likewise, the enrivonment is partialy observable
 		self.observation_space = spaces.Dict(
 			{
-				"agent": spaces.Box(0, self.map_size, shape=(2,), dtype=int),
+				"agent": spaces.Box(0, self.map_size, shape=(2,), dtype=np.int16),
 				"dirt": spaces.Discrete(2),
+				#"visits": spaces.Discrete(self.max_visits)
 			}
 		)
 
@@ -122,13 +126,13 @@ class VacuumCleanerWorldEnv(gym.Env):
 
 		"""
 		a dictionary that maps a travel action number (from `self.action_space`) 
-		to 'décalage' with regard to x and y in the grid map.
+		to 'décalage' with regard to X and Y-axis in the grid map.
 		"""
 		self._action_to_direction = {
-			2: np.array([0, 1]),		# down
-			3: np.array([1, 0]),		# right
-			4: np.array([0, -1]),		# up
-			5: np.array([-1, 0]),		# left
+			2: np.array([0, 1], dtype=np.int16),		# down
+			3: np.array([1, 0], dtype=np.int16),		# right
+			4: np.array([0, -1], dtype=np.int16),		# up
+			5: np.array([-1, 0], dtype=np.int16),		# left
 		}
 
 		# make sure render_mode is set correctly, if set at all
@@ -155,56 +159,73 @@ class VacuumCleanerWorldEnv(gym.Env):
 		self.agent_name = name
 
 	def set_map_name(self, name):
-		# set the map name
+		"""
+		Sets the map name, which a unique identifier.
+		Parameters:
+			name (str): map name
+		"""
 		self.map_name = name
 
 	def set_frame_rate(self, fps):
+		"""
+	    Set the frame rate (frames per second) for PyGame rendering.
+
+	    Parameters:
+	        fps (int): The desired number of frames per second.
+
+	    This updates the 'render_fps' field in the environment's metadata, 
+	    which can be used to control the update speed of visual rendering.
+	    """
 		metadata["render_fps"] = fps
 
 	def _get_obs(self):
 		"""
-		Returns what the agent currently observes in its environment.
-		Namely, the room the agent is currently in and 
+		Returns what the agent currently observes in the environment.
+		Namely, where the agent is currently in and 
 		the room state (dirty/clean)
 		"""
 		l = self._agent_location
-		# sense dirt in the current room
+		# sense dirt in the current room (x,y)=(l_1,l_0)
 		if self.map[l[1],l[0]] == 'x': dirty = True
 		else:  dirty = False
-		#self.logger.info("obs: {},{}".format(self._agent_location,dirty))
+		self.logger.info("obs: {},{}".format(self._agent_location,dirty))
 		return {"agent":self._agent_location, "dirt":dirty}
-
-	# @improve_me: include other information utile to the current policy
-	
+	  
+		
 	def _get_info(self):
 		"""
-		to obtain extra information on the environment after a simulation step.
-		Returns: action success flag, number of dirty rooms, step number 
+		Gives further information on the environment after a simulation step.
+		Returns: action success flag, number of dirty rooms left and step number 
 		as a dictionary.
 		"""
 		nbr_dirty = self.count_rooms(clean=False)
 		return{
 			'action_success': self._action_success,
-			'dirty_spots': nbr_dirty, 
+			'dirty_spots': nbr_dirty, 	# should not be available to the agent?!
 			'step': self._step, 
 		}
 
 	def get_rewards(self):
 		"""
-		Defines actions' rewards.
-		The env. rewards a clean room at each time step, and rewards better 
-		a room after it's cleaned. It discourages somehow noise and power consumption 
-		by penalizing somehow movement and sucking (as robot may do them without 
-		necessity). Sucking dirt may fail (Murphy law) and the robot may throw 
-		dirt and mess a clean room, this is penalized. The rewards are deterministic.
+		Defines how the environment reward the agent's actions.
+		At each time step, the env. slightly rewards for a room that remains clean
+		and evenly penalizes a dirty room, to encourage swift cleaning and exploration.
+		A big reward is given for cleaning a dirty room. The env. discourages somehow 
+		noise and power consumption by penalizing movement and sucking, but very slightly
+		since the robot may need many of these. Furthermore, this helps the agent 
+		to take a break when the dirt doesn't repear. Sucking dirt may fail (Murphy law) 
+		and the robot may throw dirt and mess a clean room, this is penalized. 
+		The rewards are deterministic.
 		"""
 		return{
-			'clean': .2,		# reward for a clean room
-			'cleaned': 3,		# reward for cleaning a dirty room
-			'dirty': -.7,		# penalty for a dirty room 
-			'suck': -1,			# penalty of noise/power consumption
-			'move': -.5,		# penalty of noise/power consumption
-			'throw': -2.,		# penalty for throwing dirt (murphy law) 
+			'clean': .1,		# reward for each clean room (per time unit)
+			'cleaned': 10.,		# reward for cleaning a dirty room
+			'dirty': -2.,		# penalty for a dirty room (per time unit)
+			'suck': -.5,		# penalty of noise/power consumption
+			'move': -.2,		# penalty of noise/power consumption
+								# and to encourage shorter paths 
+								# relevant when learning
+			'throw': -5.,		# penalty for throwing dirt (murphy law) 
 			'none': 0.,			# reward for being idle
 		}
 
@@ -220,7 +241,7 @@ class VacuumCleanerWorldEnv(gym.Env):
 
 	def get_episode_reward(self):
 		"""
-		Returns the reward collected at the current episode
+		Returns the reward collected at the end of the episode
 		"""	
 		return self._episode_reward
    
@@ -235,12 +256,13 @@ class VacuumCleanerWorldEnv(gym.Env):
 		while True:
 			# location is an np.array(): 
 			# location[0]: X-coordinate, location[1]: Y-coordinate
-			location = self.np_random.integers(0, self.map_size, size=2, dtype=int)
+			location = self.np_random.integers(0, self.map_size, size=2, dtype=np.int16)
 			# check if the location is valid (not a black room)
-			if self.map[location[1],location[0]] != '#':
+			# the map coordinates are inverted when used as matrix indices
+			x,y = location
+			if self.map[y,x] != '#':
 				break
 		return location
-
 
 	def sample_dirt(self, proba=None):
 		""" 
@@ -251,7 +273,7 @@ class VacuumCleanerWorldEnv(gym.Env):
 		:param proba: probability of dirt re-appearance at any room. 
 		"""
 		#assert self.dirt_comeback is True
-		if proba == None:
+		if proba is None:
 			proba = self.dirt_proba
 		row, col = self.map.shape
 		for i in range(row):
@@ -285,14 +307,15 @@ class VacuumCleanerWorldEnv(gym.Env):
 
 	def count_rooms(self, clean=None):
 		""" 
-		Counts the rooms in the map (clean, dirty or all).
+		Counts specific rooms in the map (clean, dirty or all).
 		:param clean (boolean): a flag to indicate whether to count clean, dirty 
 				oe all rooms (default).
 		:return: the number of rooms 
 		"""
 		#assert self.map is not None
 		# a counter dict of rooms: clean, dirty and black rooms
-		counters = collections.Counter(self.map.flatten())
+		world = self.map if self.map is not None else self.init_map
+		counters = collections.Counter(world.flatten())
 		if clean == None:
 			# number of clean room + number of dirty ones
 			return (counters['.'] + counters['x'])
@@ -304,12 +327,12 @@ class VacuumCleanerWorldEnv(gym.Env):
 	
 	def reset(self, seed=None, options=None):
 		"""
-		Resets the environment to an initial state
+		Resets the environment to some initial state
 		:params: random number generator seed, 
 			option is unused and i don't know what 
 			is it?
 		"""
-		assert self.logger is not None
+		#assert self.logger is not None
 		# seed self.np_random, the random number generator
 		super().reset(seed=seed)
 		if self._episode == None: 
@@ -324,9 +347,9 @@ class VacuumCleanerWorldEnv(gym.Env):
 		self.sample_dirt(proba=INIT_DIRT_PROBA)			
 		self._total_cleaned = 0
 		self._total_messed = 0              # nbr of rooms messed by the robot
-		self._total_travel = 0              # total distance travel by the vacuum
+		self._total_travel = 0              # total distance traveled by the vacuum robot
 		self._failures = 0					# number of failures (Murphy law)
-		self._nbr_rooms = rooms = self.count_rooms()
+		self.nbr_rooms = rooms = self.count_rooms()
 		clean = self.count_rooms(clean=True)
 		#dirty = self.count_rooms(clean=False)
 		dirty = rooms - clean
@@ -460,9 +483,9 @@ class VacuumCleanerWorldEnv(gym.Env):
 
 	def render(self):
 		"""
-		the implementation of the 'render' method
+		Show simulation in console or GUI
 		"""
-		assert self.render_mode is not None	
+		#assert self.render_mode is not None	
 		if self.render_mode == "console":
 			self._render_console()
 		elif self.render_mode == "human":
@@ -690,13 +713,12 @@ class VacuumCleanerWorldEnv(gym.Env):
 		for i in range(dim):
 			for j in range(dim):
 				if (self.map[i,j] == symbol):
-					l.append(np.array([j,i]))
+					l.append(np.array([j,i], dtype=np.int16))
 		return l
 
 	def close(self):
 		"""
-		Terminates the simulation by releasing rendering 
-		the resources created for rendering.
+		Terminates the simulation by releasing the resources created for rendering.
 		"""
 		if self.window is not None:
 			pygame.display.quit()

@@ -1,21 +1,23 @@
 """
+vacuum/policy/greedy.py
+-----------------------
 Vacuum cleaner world, 2024.
-'greedy.py'
+
 author: Hakim Mitiche
 date: April, 4th 2024
 update: Nov 26th, 2024  
 """
 
 from .base import CleanPolicy
+from .registry import register_policy
 from ..maps import Map
 import numpy as np
 import random
 #import logging
 #import os, os.path
 
-""" 
-
-"""
+MY_NAME = "greedy"
+@register_policy(MY_NAME)
 class GreedyPolicy(CleanPolicy):
 	
 	"""
@@ -30,7 +32,7 @@ class GreedyPolicy(CleanPolicy):
 			agent doesn't know about dirt re-appearance.
 	"""
 	def __init__(self, world_id, env, eco=False):
-		super().__init__("greedy", world_id, env)
+		super().__init__(MY_NAME, world_id, env)
 		# map locations ordred: left->right, up->down
 		# @see: 'maps.py'
 		self._locations = Map.locations_list(world_id)

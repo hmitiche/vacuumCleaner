@@ -75,14 +75,15 @@ class Map:
 		mapid (String): the identifier of the map to display
 	"""
 	@classmethod
-	def display_map(cls, mapid):
+	def display_map(cls, map_id):
 		if cls.world_maps == None:
 			map_list = cls.load_all_maps(Map)
-		assert len(cls.world_ids)==len(map_list), "map and IDs lists lengths don't match!"
+		assert len(cls.world_ids)==len(map_list), 
+		"[error] map and IDs lists lengths don't match!"
 		#pp = pprint.PrettyPrinter(indent=0)
 		print("Legend: '.': clean room, 'x': dirty room, '#': walls")
-		print(f"Map '{mapid}':")
-		Map.pretty_print(map_list[cls.get_map_index(Map, mapid)])
+		print(f"Map '{map_id}':")
+		Map.pretty_print(map_list[cls.get_map_index(Map, map_id)])
 		print("\n")
 
 	@classmethod
@@ -124,27 +125,26 @@ class Map:
 		return loc_list
 	
 	@classmethod
-	def load_map(cls, mapid):
+	def load_map(cls, map_id):
 		"""
 		Returns a map from vacuum world maps pool.
-		:param mapid: the selected map ID
+		:param map_id: the selected map identifier
 		Notes:
 		The agent initial location is sampled during env.make()
 		inside VacuumCleanerWorlEnv ('world.py')
 		"""
-		assert mapid in cls.world_ids, f"there is no map: {cls.mapid}"
+		assert map_id in cls.world_ids, f"[error] there is no map: '{cls.map_id}'!"
 		world_maps = cls.load_all_maps(Map)
-		map_ind = cls.get_map_index(Map, mapid)
-		cls.world_id = mapid
-		cls.world_map = world_maps[map_ind]
+		map_index = cls.get_map_index(Map, map_id)
+		cls.world_id = map_id
+		cls.world_map = world_maps[map_index]
 		return cls.world_map
 
-	def get_map_index(cls, mapid):  
+	def get_map_index(cls, map_id):  
 		"""
 		Returns the selected map index in the pre-defined list (cls.world_maps)
-
 		"""
-		return [i for i in range(len(cls.world_ids)) if cls.world_ids[i]==mapid][0]
+		return [i for i in range(len(cls.world_ids)) if cls.world_ids[i]==map_id][0]
 
 
 	def load_all_maps(cls):
@@ -183,7 +183,7 @@ class Map:
 			['#', '#', '#'],
 			['#', '#', '#'],
 		]
-		# 4 rooms v0, that froms a square (easy)
+		# 4 rooms v0, forms a square (easy)
 		world_map4_0 = [
 			['x', '.', '#'],
 			['x', 'x', '#'],

@@ -31,9 +31,10 @@ __status__ = "beta-version"
 """
 from constants import *
 from vacuum.world import VacuumCleanerWorldEnv
+from vacuum.termination_wrapper import TerminationWrapper
 from vacuum.maps import Map
 from vacuum.policy.helpers import make_policy, get_policies
-from vacuum.policy.qlearning import QLearnPolicy
+from vacuum.policy.qlearning_1 import QLearnPolicy, TRAIN_EPISODES, EPISODE_STEPS
 import gymnasium as gym
 from gymnasium.wrappers import TimeLimit
 import numpy as np
@@ -41,31 +42,31 @@ import logging
 import os, os.path
 import sys
 
-
 # main function
 def main():
 	args = sys.argv						# recuperate command-line args
 	print_help()
-	world_id, policy_id, nbr_episodes, max_steps, dirt_flag, \
-	location_sensor = parse_commandline_args(args)
+	world_id, policy_id, nbr_episodes, max_steps, dirt_flag, location_sensor 
+	= parse_commandline_args(args)
 	world_map = Map.load_map(world_id)		# from 'maps.py'
-	mygym_name = "VacuumCleanerWorld-v0"
-	print(f"Welcome to {mygym_name}, a custom open AI Gymnasium environment!")
+	gym_name = VacuumCleanerWorldEnv.GYM_NAME
+	print(f"Welcome to {gym_name}, a custom open AI Gymnasium environment!")
 	#print("[info] simulation log saved to file: {}".format(logfilename))
-	logfilename = f"{LOG_PATH}{world_id}-{policy_id}.log"
-	print("logfilename", logfilename)
+	log_filename = f"{LOG_PATH}{world_id}-{policy_id}.log"
+	print(f"[info] LOG filename: {log_filename}")
 	# delete the old logfile
-	if os.path.isfile(logfilename):
-		os.remove(logfilename)
-		print("[info] logfile erased! '{}'".format(logfilename))
-	logging.basicConfig(filename=logfilename, level=logging.DEBUG)
+	if os.path.isfile(log_filename):
+		os.remove(log_filename)
+		print("[info] LOG file erased! '{}'".format(log_filename))
+	logging.basicConfig(filename=log_filename, level=logging.DEBUG)
 	logger = logging.getLogger(__name__)
 	# avoid rendering when there are many simulation episodes
 	if (nbr_episodes > 1):
 		#rmode = 'console'
-		rmode = None		# render mode
-	else: rmode = 'human'
-	print(f"[info] rendering mode: {rmode}")
+		rmode = None		# rendering disabled
+	else: 
+		rmode = 'human'		# PyGame rendering
+	print(f"[info] rendering mode: '{rmode}'")
 	# register the env. with its parameters (kwargs)
 	gym.register(
 		 id="VacuumCleanerWorld-v0",
@@ -76,7 +77,7 @@ def main():
 		 'location_sensor':location_sensor, 'episode_max_steps':max_steps, 'render_mode':rmode}
 	)
 	# converted the selected vacuum map to 2D numpy array
-	wmap = np.array(world_map)
+	wmap = np.array(world_map, dtype='<U1')
 	# uncomment if you prefer 'console' render mode when there are many episodes
 	#env = gym.make('VacuumCleanerWorld-v0', grid=wmap, render_mode='console')
 	# create the gym env.
@@ -95,8 +96,8 @@ def main():
 	print("[info] Action space: ", env.action_space)
 	reward_dict = env.unwrapped.get_rewards()
 	action_dict = env.unwrapped.get_actions()
-	print("[info] Actions dictionary: ", action_dict)
-	print("[info] Rewards dictionary: ", reward_dict)
+	print("[info] Action dictionary: ", action_dict)
+	print("[info] Reward dictionary: ", reward_dict)
 	print('[info] Location sensor: ', location_sensor)
 	eco_flag = False # economic operation mode	(default)		
 	# a greedy policy stops re-exploring rooms when the agent knows 
@@ -114,27 +115,51 @@ def main():
 	print('[info] Map ID: {}'.format(world_id))
 	print('[info] dirt comeback: ', dirt_flag)
 
-	# train the QL agent, retrain it or load the qtable for QL agent (when trained)
+	# train the QL agent, retrain it or load the its Q table (when trained)
+	#@IMPROVE_ME: this logic should better be inside the policy
 	if isinstance(policy, QLearnPolicy):
 		trained = policy.load_qtable()
 		retrain = False
 		if trained:
-			print("[info] the QLearning agent is already trained!")
-			answer = input("[prompt] Would you like to retrain the QL agent? [y/n]")
+			print("[info] the Q Learning agent is already trained!")
+			answer = input("[prompt] Would you like to retrain the QL agent? [y/n] ")
 			if answer == "y":
 				retrain = True
 		if not trained or retrain:
-			key = input(f"[prompt] Press 'Enter' to re-train '{policy_id}' agent!")
-			if key != "": exit()
-			print(f"[info] Entraînement pour la carte '{world_id}'' sur {TRAIN_EPISODES} épisodes...")
-			env.unwrapped.render_mode = None		# don't render training (default)
-			print("[info] training rendering disabled!")
+			if not env.unwrapped.dirt_comeback:
+				# end mission after cleaning all rooms for smooth learning
+				env = TerminationWrapper(env)      
+			print(f"[info] Training '{policy.policy_id}' on map '{world_id}'\
+				over {EPISODE_STEPS} steps and {TRAIN_EPISODES} episodes...")
+			answer = input("[prompt] Change the number of episodes/steps? [new_values/Enter] ") 
+			if answer == "":
+				train_eps = TRAIN_EPISODES
+				train_steps = EPISODE_STEPS
+			else:
+				train_eps, train_steps = map(int, answer.split())
+				print(
+					f"[info] Training '{policy.policy_id}' on map '{world_id}' over "
+					f"{train_steps} steps and {train_eps} episodes..."
+					)
+			answer = input("[prompt] render the training on PyGame? [y/Enter] ") 
+			if answer == "y":
+				env.unwrapped.render_mode = "human"	
+				env.unwrapped.set_agent_name(policy_id+" (training)")
+			else:
+				# don't render training (default)
+				env.unwrapped.render_mode = None		
+				print("[info] VacuumCleanerWorld-v0 rendering disabled!")
 			# training episodes can be different then test episodes
-			policy.train_q_learning(env, episodes=TRAIN_EPISODES)
+			policy.train_q_learning(env, episodes=train_eps)
+			# Q table is loaded and ready
+			key = input(f" [prompt] Press 'Enter' to plot visits heatmap!")
+			if key == "":
+				# heatmap of room visits in the last training episode
+				policy.plot_visit_heatmap()
 			env.unwrapped.render_mode = rmode		# restore render mode for QL ag. test
 			# test the trained QL agent
 
-	print('[info] simulating {} episodes...'.format(nbr_episodes))
+	print('[info] Simulating {} episodes...'.format(nbr_episodes))
 	logger.info("[info] map:'{}'' policy:'{}' location_sensor:'{}' eps:{}\
 		 max_steps:{}".format(world_id, policy_id, location_sensor,\
 		 	nbr_episodes, max_steps))
@@ -148,17 +173,17 @@ def main():
 	# simulation main loop		
 	for eps in range(nbr_episodes):
 		print("[info] episode {}, world configuration: ".format(eps+1))
-		# reset the agent  policy and environment
+		# reset the agent policy and environment
 		policy.reset()
 		state = env.reset()[0]
 		print("Initial state: (agent coordinates, dirt)=({},{}), world map: \n {}".\
 			format(state['agent'], state['dirt'], wmap))
 		print("step \t action  reward  state(ag_loc,dirt) \t info(dirty, act_done)")		
 		done = False
-		# espisode loop
+		# one episode loop
 		while not done:
 			action = policy.select_action(state)
-			state, reward, done, truncated, info = env.step(action)
+			state, reward, terminated, truncated, info = env.step(action)
 			step = info['step']
 			dirty_rooms = info['dirty_spots']
 			action_success = info['action_success']
@@ -166,7 +191,7 @@ def main():
 			'dirty' if state['dirt'] else 'clean'
 			print(step, ": \t", action_dict[action], "\t", round(reward,2), "\t",\
 			state_tuple, "\t (", dirty_rooms,",", action_success,")")
-			if truncated: break
+			done = terminated or truncated
 
 		#clean = env.get_wrapper_attr('_clean_rooms')
 		rooms = env.get_wrapper_attr('_nbr_rooms')
@@ -205,8 +230,8 @@ def main():
 		results = {'reward':rewards, 'cleaned':cleanings, 'travel':travels}
 		Tools.save_results(world_id, policy_id, results)
 	print('[info] to plot results, type: ')
-	print('\t python -m tools -v [world_id]')
-	print('or type python -m tools -h for further options!')
+	print('\t python -m helpers -v [world_id]')
+	print('or type python -m helpers -h for further options!')
 
 def print_help():
 	"""

@@ -16,4 +16,18 @@ performance results are saved in "data/*.pkl" and plots in "plots/*.png",
 logs in "logs/*.log"
 
 
+quick help:
+
+	python main.py -v
+	==> show available maps
+	
+	python vacuumclean 20 3 -cl
+	==> run QL on map 20 (vacuum-12rooms-v0) with dirt no showing up again
+	((re)train and test)
+
+	python -m tools -t vacuum-12rooms-v0
+	==> plot QL training perforance
+
+
+
 tbc..

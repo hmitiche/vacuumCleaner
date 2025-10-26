@@ -14,13 +14,16 @@ date: April, 6th 2024
 #@COMPLETEME: write code for the remaining maps in 'maps.py'
 
 from .base import CleanPolicy
+from .registry import register_policy
 from vacuum.maps import Map
 import numpy as np
 import random
 import logging
 #import os, os.path
 
+MY_NAME = "greedy-random"
 
+@register_policy(MY_NAME)
 class GreedyRandomPolicy(CleanPolicy):
 	""" 
 	An implementation of a random reflex-based agent.
@@ -30,7 +33,7 @@ class GreedyRandomPolicy(CleanPolicy):
 	but it's easiest to code and quick fair solution. 
 	"""
 	def __init__(self, world_id, env, eco=False):
-		super().__init__("greedy-random", world_id, env)
+		super().__init__(MY_NAME, world_id, env)
 		# map locations ordred: left->right, up->down
 		# @see: 'maps.py'
 		self._locations = Map.locations_list(world_id)
