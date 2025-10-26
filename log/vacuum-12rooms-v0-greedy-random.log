@@ -1,0 +1,11 @@
+INFO:vacuum.world:env reset:
+INFO:vacuum.world:rooms 12, clean 8, dirty 4
+INFO:vacuum.world:agent start location [1 3]
+INFO:__main__:{'grid': array([['.', 'x', '#', 'x'],
+       ['#', 'x', '#', '.'],
+       ['.', '.', '.', '.'],
+       ['.', '.', 'x', '#']], dtype='<U1'), 'dirt_comeback': False, 'dirt_proba': 0.09, 'murphy_proba': 0.11, 'location_sensor': True, 'episode_max_steps': 200, 'render_mode': 'human'}
+INFO:__main__:[info] map:'vacuum-12rooms-v0'' policy:'greedy-random' location_sensor:'True' eps:1		 max_steps:200
+INFO:vacuum.world:env reset:
+INFO:vacuum.world:rooms 12, clean 3, dirty 9
+INFO:vacuum.world:agent start location [0 0]

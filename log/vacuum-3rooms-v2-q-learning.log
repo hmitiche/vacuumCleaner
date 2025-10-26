@@ -1,0 +1,49 @@
+INFO:vacuum.world:env reset:
+INFO:vacuum.world:rooms 3, clean 1, dirty 2
+INFO:vacuum.world:agent start location [0 0]
+INFO:__main__:{'grid': array([['.', 'x', 'x'],
+       ['#', '#', '#'],
+       ['#', '#', '#']], dtype='<U1'), 'dirt_comeback': False, 'dirt_proba': 0.09, 'murphy_proba': 0.11, 'location_sensor': True, 'episode_max_steps': 200, 'render_mode': 'human'}
+INFO:__main__:[info] map:'vacuum-3rooms-v2'' policy:'q-learning' location_sensor:'True' eps:1		 max_steps:200
+INFO:vacuum.world:env reset:
+INFO:vacuum.world:rooms 3, clean 0, dirty 3
+INFO:vacuum.world:agent start location [2 0]
+INFO:vacuum.world:action: 'suck'
+INFO:vacuum.world:action 'suck' succeeded!
+INFO:vacuum.world:room (np.int64(2), np.int64(0)) is cleaned!
+INFO:vacuum.world:action: 'left'
+INFO:vacuum.world:action 'left' failed!
+INFO:vacuum.world:movement failed! (Murphy law) :(
+INFO:vacuum.world:action: 'left'
+INFO:vacuum.world:action 'left' succeeded!
+INFO:vacuum.world:agent moved to (1,0)
+INFO:vacuum.world:action: 'suck'
+INFO:vacuum.world:action 'suck' succeeded!
+INFO:vacuum.world:room (np.int64(1), np.int64(0)) is cleaned!
+INFO:vacuum.world:action: 'left'
+INFO:vacuum.world:action 'left' succeeded!
+INFO:vacuum.world:agent moved to (0,0)
+INFO:vacuum.world:action: 'suck'
+INFO:vacuum.world:action 'suck' succeeded!
+INFO:vacuum.world:room (np.int64(0), np.int64(0)) is cleaned!
+INFO:vacuum.world:action: 'left'
+INFO:vacuum.world:action 'left' succeeded!
+INFO:vacuum.world:can't move out of boundry, staying in (np.int64(0), np.int64(0))
+INFO:vacuum.world:action: 'left'
+INFO:vacuum.world:action 'left' succeeded!
+INFO:vacuum.world:can't move out of boundry, staying in (np.int64(0), np.int64(0))
+INFO:vacuum.world:action: 'left'
+INFO:vacuum.world:action 'left' failed!
+INFO:vacuum.world:movement failed! (Murphy law) :(
+INFO:vacuum.world:action: 'left'
+INFO:vacuum.world:action 'left' succeeded!
+INFO:vacuum.world:can't move out of boundry, staying in (np.int64(0), np.int64(0))
+INFO:vacuum.world:action: 'left'
+INFO:vacuum.world:action 'left' succeeded!
+INFO:vacuum.world:can't move out of boundry, staying in (np.int64(0), np.int64(0))
+INFO:vacuum.world:action: 'left'
+INFO:vacuum.world:action 'left' succeeded!
+INFO:vacuum.world:can't move out of boundry, staying in (np.int64(0), np.int64(0))
+INFO:vacuum.world:action: 'left'
+INFO:vacuum.world:action 'left' succeeded!
+INFO:vacuum.world:can't move out of boundry, staying in (np.int64(0), np.int64(0))

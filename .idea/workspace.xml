@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="8dfdfe5e-e6b2-495b-bfb5-0c570497909e" name="Changes" comment="mis à jour finale du projet" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Python Script" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+    <option name="UPDATE_TYPE" value="REBASE" />
+  </component>
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {}
+}</component>
+  <component name="GitHubPullRequestState"><![CDATA[{
+  "prStates": [
+    {
+      "id": {
+        "id": "PR_kwDOOCVtNs6Xr1pN",
+        "number": 5
+      },
+      "lastSeen": 1761493258000
+    }
+  ]
+}]]></component>
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/hmitiche/vacuumCleaner&quot;,
+    &quot;accountId&quot;: &quot;2e66d03f-0bb4-4170-88b3-96edd03bace3&quot;
+  },
+  &quot;recentNewPullRequestHead&quot;: {
+    &quot;server&quot;: {
+      &quot;useHttp&quot;: false,
+      &quot;host&quot;: &quot;github.com&quot;,
+      &quot;port&quot;: null,
+      &quot;suffix&quot;: null
+    },
+    &quot;owner&quot;: &quot;hmitiche&quot;,
+    &quot;repository&quot;: &quot;vacuumCleaner&quot;
+  }
+}</component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 7
+}</component>
+  <component name="ProjectId" id="2vfvuPeHu4lKGAQ34XAZDE456br" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Python.main.executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;#5 on pfe25&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/user/vacuumCleaner&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.lookFeel&quot;
+  }
+}</component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-python-sdk-d7ad00fb9fc3-c546a90a8094-com.jetbrains.pycharm.community.sharedIndexes.bundled-PC-242.23726.102" />
+      </set>
+    </attachedChunks>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="8dfdfe5e-e6b2-495b-bfb5-0c570497909e" name="Changes" comment="" />
+      <created>1744549165295</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1744549165295</updated>
+    </task>
+    <task id="LOCAL-00001" summary="modification de fechiers qlearning.py et tools.py">
+      <option name="closed" value="true" />
+      <created>1744706433355</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1744706433355</updated>
+    </task>
+    <task id="LOCAL-00002" summary="ajouter des fonctions save_stable et load_stable + appel fonction train_q_learning en main.py">
+      <option name="closed" value="true" />
+      <created>1744882729130</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1744882729130</updated>
+    </task>
+    <task id="LOCAL-00003" summary="ajouter des fonctions save_stable et load_stable + appel fonction train_q_learning en main.py">
+      <option name="closed" value="true" />
+      <created>1745405718410</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1745405718410</updated>
+    </task>
+    <task id="LOCAL-00004" summary=" màj du reward tu la fait dans la boucle QL">
+      <option name="closed" value="true" />
+      <created>1746130621630</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1746130621630</updated>
+    </task>
+    <task id="LOCAL‎-00005" summary="j'ajoute new policy (q learning en ligne)">
+      <option name="closed" value="true" />
+      <created>1746824247785</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL‎-00005" />
+      <option name="project" value="LOCAL‎" />
+      <updated>1746824247785</updated>
+    </task>
+    <task id="LOCAL‎-00006" summary="mis à jour finale du projet">
+      <option name="closed" value="true" />
+      <created>1748290442543</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL‎-00006" />
+      <option name="project" value="LOCAL‎" />
+      <updated>1748290442543</updated>
+    </task>
+    <task id="LOCAL‎-00007" summary="mis à jour finale du projet">
+      <option name="closed" value="true" />
+      <created>1761488963553</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL‎-00007" />
+      <option name="project" value="LOCAL‎" />
+      <updated>1761488963553</updated>
+    </task>
+    <option name="localTasksCounter" value="8" />
+    <servers />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="modification de fechiers qlearning.py et tools.py" />
+    <MESSAGE value="ajouter des fonctions save_stable et load_stable + appel fonction train_q_learning en main.py" />
+    <MESSAGE value=" màj du reward tu la fait dans la boucle QL" />
+    <MESSAGE value="j'ajoute new policy (q learning en ligne)" />
+    <MESSAGE value="mis à jour finale du projet" />
+    <option name="LAST_COMMIT_MESSAGE" value="mis à jour finale du projet" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/main.py</url>
+          <line>31</line>
+          <option name="timeStamp" value="1" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/vacuum/policy/q_learning_online.py</url>
+          <option name="timeStamp" value="2" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
+  </component>
+</project>

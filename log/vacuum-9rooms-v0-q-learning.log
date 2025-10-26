@@ -1,0 +1,610 @@
+INFO:vacuum.world:env reset:
+INFO:vacuum.world:rooms 9, clean 6, dirty 3
+INFO:vacuum.world:agent start location [1 2]
+INFO:__main__:{'grid': array([['.', 'x', 'x'],
+       ['x', '.', '.'],
+       ['.', '.', '.']], dtype='<U1'), 'dirt_comeback': False, 'dirt_proba': 0.09, 'murphy_proba': 0.0, 'location_sensor': True, 'episode_max_steps': 200, 'render_mode': 'human'}
+INFO:__main__:[info] map:'vacuum-9rooms-v0'' policy:'q-learning' location_sensor:'True' eps:1		 max_steps:200
+INFO:vacuum.world:env reset:
+INFO:vacuum.world:rooms 9, clean 3, dirty 6
+INFO:vacuum.world:agent start location [0 2]
+INFO:vacuum.world:action: 'suck'
+INFO:vacuum.world:action 'suck' succeeded!
+INFO:vacuum.world:room (np.int64(0), np.int64(2)) is cleaned!
+INFO:vacuum.world:action: 'up'
+INFO:vacuum.world:action 'up' succeeded!
+INFO:vacuum.world:agent moved to (0,1)
+INFO:vacuum.world:action: 'suck'
+INFO:vacuum.world:action 'suck' succeeded!
+INFO:vacuum.world:room (np.int64(0), np.int64(1)) is cleaned!
+INFO:vacuum.world:action: 'up'
+INFO:vacuum.world:action 'up' succeeded!
+INFO:vacuum.world:agent moved to (0,0)
+INFO:vacuum.world:action: 'right'
+INFO:vacuum.world:action 'right' succeeded!
+INFO:vacuum.world:agent moved to (1,0)
+INFO:vacuum.world:action: 'suck'
+INFO:vacuum.world:action 'suck' succeeded!
+INFO:vacuum.world:room (np.int64(1), np.int64(0)) is cleaned!
+INFO:vacuum.world:action: 'right'
+INFO:vacuum.world:action 'right' succeeded!
+INFO:vacuum.world:agent moved to (2,0)
+INFO:vacuum.world:action: 'suck'
+INFO:vacuum.world:action 'suck' succeeded!
+INFO:vacuum.world:room (np.int64(2), np.int64(0)) is cleaned!
+INFO:vacuum.world:action: 'down'
+INFO:vacuum.world:action 'down' succeeded!
+INFO:vacuum.world:agent moved to (2,1)
+INFO:vacuum.world:action: 'down'
+INFO:vacuum.world:action 'down' succeeded!
+INFO:vacuum.world:agent moved to (2,2)
+INFO:vacuum.world:action: 'suck'
+INFO:vacuum.world:action 'suck' succeeded!
+INFO:vacuum.world:room (np.int64(2), np.int64(2)) is cleaned!
+INFO:vacuum.world:action: 'left'
+INFO:vacuum.world:action 'left' succeeded!
+INFO:vacuum.world:agent moved to (1,2)
+INFO:vacuum.world:action: 'left'
+INFO:vacuum.world:action 'left' succeeded!
+INFO:vacuum.world:agent moved to (0,2)
+INFO:vacuum.world:action: 'up'
+INFO:vacuum.world:action 'up' succeeded!
+INFO:vacuum.world:agent moved to (0,1)
+INFO:vacuum.world:action: 'up'
+INFO:vacuum.world:action 'up' succeeded!
+INFO:vacuum.world:agent moved to (0,0)
+INFO:vacuum.world:action: 'right'
+INFO:vacuum.world:action 'right' succeeded!
+INFO:vacuum.world:agent moved to (1,0)
+INFO:vacuum.world:action: 'right'
+INFO:vacuum.world:action 'right' succeeded!
+INFO:vacuum.world:agent moved to (2,0)
+INFO:vacuum.world:action: 'down'
+INFO:vacuum.world:action 'down' succeeded!
+INFO:vacuum.world:agent moved to (2,1)
+INFO:vacuum.world:action: 'down'
+INFO:vacuum.world:action 'down' succeeded!
+INFO:vacuum.world:agent moved to (2,2)
+INFO:vacuum.world:action: 'left'
+INFO:vacuum.world:action 'left' succeeded!
+INFO:vacuum.world:agent moved to (1,2)
+INFO:vacuum.world:action: 'left'
+INFO:vacuum.world:action 'left' succeeded!
+INFO:vacuum.world:agent moved to (0,2)
+INFO:vacuum.world:action: 'up'
+INFO:vacuum.world:action 'up' succeeded!
+INFO:vacuum.world:agent moved to (0,1)
+INFO:vacuum.world:action: 'up'
+INFO:vacuum.world:action 'up' succeeded!
+INFO:vacuum.world:agent moved to (0,0)
+INFO:vacuum.world:action: 'right'
+INFO:vacuum.world:action 'right' succeeded!
+INFO:vacuum.world:agent moved to (1,0)
+INFO:vacuum.world:action: 'right'
+INFO:vacuum.world:action 'right' succeeded!
+INFO:vacuum.world:agent moved to (2,0)
+INFO:vacuum.world:action: 'down'
+INFO:vacuum.world:action 'down' succeeded!
+INFO:vacuum.world:agent moved to (2,1)
+INFO:vacuum.world:action: 'down'
+INFO:vacuum.world:action 'down' succeeded!
+INFO:vacuum.world:agent moved to (2,2)
+INFO:vacuum.world:action: 'left'
+INFO:vacuum.world:action 'left' succeeded!
+INFO:vacuum.world:agent moved to (1,2)
+INFO:vacuum.world:action: 'left'
+INFO:vacuum.world:action 'left' succeeded!
+INFO:vacuum.world:agent moved to (0,2)
+INFO:vacuum.world:action: 'up'
+INFO:vacuum.world:action 'up' succeeded!
+INFO:vacuum.world:agent moved to (0,1)
+INFO:vacuum.world:action: 'up'
+INFO:vacuum.world:action 'up' succeeded!
+INFO:vacuum.world:agent moved to (0,0)
+INFO:vacuum.world:action: 'right'
+INFO:vacuum.world:action 'right' succeeded!
+INFO:vacuum.world:agent moved to (1,0)
+INFO:vacuum.world:action: 'right'
+INFO:vacuum.world:action 'right' succeeded!
+INFO:vacuum.world:agent moved to (2,0)
+INFO:vacuum.world:action: 'down'
+INFO:vacuum.world:action 'down' succeeded!
+INFO:vacuum.world:agent moved to (2,1)
+INFO:vacuum.world:action: 'down'
+INFO:vacuum.world:action 'down' succeeded!
+INFO:vacuum.world:agent moved to (2,2)
+INFO:vacuum.world:action: 'left'
+INFO:vacuum.world:action 'left' succeeded!
+INFO:vacuum.world:agent moved to (1,2)
+INFO:vacuum.world:action: 'left'
+INFO:vacuum.world:action 'left' succeeded!
+INFO:vacuum.world:agent moved to (0,2)
+INFO:vacuum.world:action: 'up'
+INFO:vacuum.world:action 'up' succeeded!
+INFO:vacuum.world:agent moved to (0,1)
+INFO:vacuum.world:action: 'up'
+INFO:vacuum.world:action 'up' succeeded!
+INFO:vacuum.world:agent moved to (0,0)
+INFO:vacuum.world:action: 'right'
+INFO:vacuum.world:action 'right' succeeded!
+INFO:vacuum.world:agent moved to (1,0)
+INFO:vacuum.world:action: 'right'
+INFO:vacuum.world:action 'right' succeeded!
+INFO:vacuum.world:agent moved to (2,0)
+INFO:vacuum.world:action: 'down'
+INFO:vacuum.world:action 'down' succeeded!
+INFO:vacuum.world:agent moved to (2,1)
+INFO:vacuum.world:action: 'down'
+INFO:vacuum.world:action 'down' succeeded!
+INFO:vacuum.world:agent moved to (2,2)
+INFO:vacuum.world:action: 'left'
+INFO:vacuum.world:action 'left' succeeded!
+INFO:vacuum.world:agent moved to (1,2)
+INFO:vacuum.world:action: 'left'
+INFO:vacuum.world:action 'left' succeeded!
+INFO:vacuum.world:agent moved to (0,2)
+INFO:vacuum.world:action: 'up'
+INFO:vacuum.world:action 'up' succeeded!
+INFO:vacuum.world:agent moved to (0,1)
+INFO:vacuum.world:action: 'up'
+INFO:vacuum.world:action 'up' succeeded!
+INFO:vacuum.world:agent moved to (0,0)
+INFO:vacuum.world:action: 'right'
+INFO:vacuum.world:action 'right' succeeded!
+INFO:vacuum.world:agent moved to (1,0)
+INFO:vacuum.world:action: 'right'
+INFO:vacuum.world:action 'right' succeeded!
+INFO:vacuum.world:agent moved to (2,0)
+INFO:vacuum.world:action: 'down'
+INFO:vacuum.world:action 'down' succeeded!
+INFO:vacuum.world:agent moved to (2,1)
+INFO:vacuum.world:action: 'down'
+INFO:vacuum.world:action 'down' succeeded!
+INFO:vacuum.world:agent moved to (2,2)
+INFO:vacuum.world:action: 'left'
+INFO:vacuum.world:action 'left' succeeded!
+INFO:vacuum.world:agent moved to (1,2)
+INFO:vacuum.world:action: 'left'
+INFO:vacuum.world:action 'left' succeeded!
+INFO:vacuum.world:agent moved to (0,2)
+INFO:vacuum.world:action: 'up'
+INFO:vacuum.world:action 'up' succeeded!
+INFO:vacuum.world:agent moved to (0,1)
+INFO:vacuum.world:action: 'up'
+INFO:vacuum.world:action 'up' succeeded!
+INFO:vacuum.world:agent moved to (0,0)
+INFO:vacuum.world:action: 'right'
+INFO:vacuum.world:action 'right' succeeded!
+INFO:vacuum.world:agent moved to (1,0)
+INFO:vacuum.world:action: 'right'
+INFO:vacuum.world:action 'right' succeeded!
+INFO:vacuum.world:agent moved to (2,0)
+INFO:vacuum.world:action: 'down'
+INFO:vacuum.world:action 'down' succeeded!
+INFO:vacuum.world:agent moved to (2,1)
+INFO:vacuum.world:action: 'down'
+INFO:vacuum.world:action 'down' succeeded!
+INFO:vacuum.world:agent moved to (2,2)
+INFO:vacuum.world:action: 'left'
+INFO:vacuum.world:action 'left' succeeded!
+INFO:vacuum.world:agent moved to (1,2)
+INFO:vacuum.world:action: 'left'
+INFO:vacuum.world:action 'left' succeeded!
+INFO:vacuum.world:agent moved to (0,2)
+INFO:vacuum.world:action: 'up'
+INFO:vacuum.world:action 'up' succeeded!
+INFO:vacuum.world:agent moved to (0,1)
+INFO:vacuum.world:action: 'up'
+INFO:vacuum.world:action 'up' succeeded!
+INFO:vacuum.world:agent moved to (0,0)
+INFO:vacuum.world:action: 'right'
+INFO:vacuum.world:action 'right' succeeded!
+INFO:vacuum.world:agent moved to (1,0)
+INFO:vacuum.world:action: 'right'
+INFO:vacuum.world:action 'right' succeeded!
+INFO:vacuum.world:agent moved to (2,0)
+INFO:vacuum.world:action: 'down'
+INFO:vacuum.world:action 'down' succeeded!
+INFO:vacuum.world:agent moved to (2,1)
+INFO:vacuum.world:action: 'down'
+INFO:vacuum.world:action 'down' succeeded!
+INFO:vacuum.world:agent moved to (2,2)
+INFO:vacuum.world:action: 'left'
+INFO:vacuum.world:action 'left' succeeded!
+INFO:vacuum.world:agent moved to (1,2)
+INFO:vacuum.world:action: 'left'
+INFO:vacuum.world:action 'left' succeeded!
+INFO:vacuum.world:agent moved to (0,2)
+INFO:vacuum.world:action: 'up'
+INFO:vacuum.world:action 'up' succeeded!
+INFO:vacuum.world:agent moved to (0,1)
+INFO:vacuum.world:action: 'up'
+INFO:vacuum.world:action 'up' succeeded!
+INFO:vacuum.world:agent moved to (0,0)
+INFO:vacuum.world:action: 'right'
+INFO:vacuum.world:action 'right' succeeded!
+INFO:vacuum.world:agent moved to (1,0)
+INFO:vacuum.world:action: 'right'
+INFO:vacuum.world:action 'right' succeeded!
+INFO:vacuum.world:agent moved to (2,0)
+INFO:vacuum.world:action: 'down'
+INFO:vacuum.world:action 'down' succeeded!
+INFO:vacuum.world:agent moved to (2,1)
+INFO:vacuum.world:action: 'down'
+INFO:vacuum.world:action 'down' succeeded!
+INFO:vacuum.world:agent moved to (2,2)
+INFO:vacuum.world:action: 'left'
+INFO:vacuum.world:action 'left' succeeded!
+INFO:vacuum.world:agent moved to (1,2)
+INFO:vacuum.world:action: 'left'
+INFO:vacuum.world:action 'left' succeeded!
+INFO:vacuum.world:agent moved to (0,2)
+INFO:vacuum.world:action: 'up'
+INFO:vacuum.world:action 'up' succeeded!
+INFO:vacuum.world:agent moved to (0,1)
+INFO:vacuum.world:action: 'up'
+INFO:vacuum.world:action 'up' succeeded!
+INFO:vacuum.world:agent moved to (0,0)
+INFO:vacuum.world:action: 'right'
+INFO:vacuum.world:action 'right' succeeded!
+INFO:vacuum.world:agent moved to (1,0)
+INFO:vacuum.world:action: 'right'
+INFO:vacuum.world:action 'right' succeeded!
+INFO:vacuum.world:agent moved to (2,0)
+INFO:vacuum.world:action: 'down'
+INFO:vacuum.world:action 'down' succeeded!
+INFO:vacuum.world:agent moved to (2,1)
+INFO:vacuum.world:action: 'down'
+INFO:vacuum.world:action 'down' succeeded!
+INFO:vacuum.world:agent moved to (2,2)
+INFO:vacuum.world:action: 'left'
+INFO:vacuum.world:action 'left' succeeded!
+INFO:vacuum.world:agent moved to (1,2)
+INFO:vacuum.world:action: 'left'
+INFO:vacuum.world:action 'left' succeeded!
+INFO:vacuum.world:agent moved to (0,2)
+INFO:vacuum.world:action: 'up'
+INFO:vacuum.world:action 'up' succeeded!
+INFO:vacuum.world:agent moved to (0,1)
+INFO:vacuum.world:action: 'up'
+INFO:vacuum.world:action 'up' succeeded!
+INFO:vacuum.world:agent moved to (0,0)
+INFO:vacuum.world:action: 'right'
+INFO:vacuum.world:action 'right' succeeded!
+INFO:vacuum.world:agent moved to (1,0)
+INFO:vacuum.world:action: 'right'
+INFO:vacuum.world:action 'right' succeeded!
+INFO:vacuum.world:agent moved to (2,0)
+INFO:vacuum.world:action: 'down'
+INFO:vacuum.world:action 'down' succeeded!
+INFO:vacuum.world:agent moved to (2,1)
+INFO:vacuum.world:action: 'down'
+INFO:vacuum.world:action 'down' succeeded!
+INFO:vacuum.world:agent moved to (2,2)
+INFO:vacuum.world:action: 'left'
+INFO:vacuum.world:action 'left' succeeded!
+INFO:vacuum.world:agent moved to (1,2)
+INFO:vacuum.world:action: 'left'
+INFO:vacuum.world:action 'left' succeeded!
+INFO:vacuum.world:agent moved to (0,2)
+INFO:vacuum.world:action: 'up'
+INFO:vacuum.world:action 'up' succeeded!
+INFO:vacuum.world:agent moved to (0,1)
+INFO:vacuum.world:action: 'up'
+INFO:vacuum.world:action 'up' succeeded!
+INFO:vacuum.world:agent moved to (0,0)
+INFO:vacuum.world:action: 'right'
+INFO:vacuum.world:action 'right' succeeded!
+INFO:vacuum.world:agent moved to (1,0)
+INFO:vacuum.world:action: 'right'
+INFO:vacuum.world:action 'right' succeeded!
+INFO:vacuum.world:agent moved to (2,0)
+INFO:vacuum.world:action: 'down'
+INFO:vacuum.world:action 'down' succeeded!
+INFO:vacuum.world:agent moved to (2,1)
+INFO:vacuum.world:action: 'down'
+INFO:vacuum.world:action 'down' succeeded!
+INFO:vacuum.world:agent moved to (2,2)
+INFO:vacuum.world:action: 'left'
+INFO:vacuum.world:action 'left' succeeded!
+INFO:vacuum.world:agent moved to (1,2)
+INFO:vacuum.world:action: 'left'
+INFO:vacuum.world:action 'left' succeeded!
+INFO:vacuum.world:agent moved to (0,2)
+INFO:vacuum.world:action: 'up'
+INFO:vacuum.world:action 'up' succeeded!
+INFO:vacuum.world:agent moved to (0,1)
+INFO:vacuum.world:action: 'up'
+INFO:vacuum.world:action 'up' succeeded!
+INFO:vacuum.world:agent moved to (0,0)
+INFO:vacuum.world:action: 'right'
+INFO:vacuum.world:action 'right' succeeded!
+INFO:vacuum.world:agent moved to (1,0)
+INFO:vacuum.world:action: 'right'
+INFO:vacuum.world:action 'right' succeeded!
+INFO:vacuum.world:agent moved to (2,0)
+INFO:vacuum.world:action: 'down'
+INFO:vacuum.world:action 'down' succeeded!
+INFO:vacuum.world:agent moved to (2,1)
+INFO:vacuum.world:action: 'down'
+INFO:vacuum.world:action 'down' succeeded!
+INFO:vacuum.world:agent moved to (2,2)
+INFO:vacuum.world:action: 'left'
+INFO:vacuum.world:action 'left' succeeded!
+INFO:vacuum.world:agent moved to (1,2)
+INFO:vacuum.world:action: 'left'
+INFO:vacuum.world:action 'left' succeeded!
+INFO:vacuum.world:agent moved to (0,2)
+INFO:vacuum.world:action: 'up'
+INFO:vacuum.world:action 'up' succeeded!
+INFO:vacuum.world:agent moved to (0,1)
+INFO:vacuum.world:action: 'up'
+INFO:vacuum.world:action 'up' succeeded!
+INFO:vacuum.world:agent moved to (0,0)
+INFO:vacuum.world:action: 'right'
+INFO:vacuum.world:action 'right' succeeded!
+INFO:vacuum.world:agent moved to (1,0)
+INFO:vacuum.world:action: 'right'
+INFO:vacuum.world:action 'right' succeeded!
+INFO:vacuum.world:agent moved to (2,0)
+INFO:vacuum.world:action: 'down'
+INFO:vacuum.world:action 'down' succeeded!
+INFO:vacuum.world:agent moved to (2,1)
+INFO:vacuum.world:action: 'down'
+INFO:vacuum.world:action 'down' succeeded!
+INFO:vacuum.world:agent moved to (2,2)
+INFO:vacuum.world:action: 'left'
+INFO:vacuum.world:action 'left' succeeded!
+INFO:vacuum.world:agent moved to (1,2)
+INFO:vacuum.world:action: 'left'
+INFO:vacuum.world:action 'left' succeeded!
+INFO:vacuum.world:agent moved to (0,2)
+INFO:vacuum.world:action: 'up'
+INFO:vacuum.world:action 'up' succeeded!
+INFO:vacuum.world:agent moved to (0,1)
+INFO:vacuum.world:action: 'up'
+INFO:vacuum.world:action 'up' succeeded!
+INFO:vacuum.world:agent moved to (0,0)
+INFO:vacuum.world:action: 'right'
+INFO:vacuum.world:action 'right' succeeded!
+INFO:vacuum.world:agent moved to (1,0)
+INFO:vacuum.world:action: 'right'
+INFO:vacuum.world:action 'right' succeeded!
+INFO:vacuum.world:agent moved to (2,0)
+INFO:vacuum.world:action: 'down'
+INFO:vacuum.world:action 'down' succeeded!
+INFO:vacuum.world:agent moved to (2,1)
+INFO:vacuum.world:action: 'down'
+INFO:vacuum.world:action 'down' succeeded!
+INFO:vacuum.world:agent moved to (2,2)
+INFO:vacuum.world:action: 'left'
+INFO:vacuum.world:action 'left' succeeded!
+INFO:vacuum.world:agent moved to (1,2)
+INFO:vacuum.world:action: 'left'
+INFO:vacuum.world:action 'left' succeeded!
+INFO:vacuum.world:agent moved to (0,2)
+INFO:vacuum.world:action: 'up'
+INFO:vacuum.world:action 'up' succeeded!
+INFO:vacuum.world:agent moved to (0,1)
+INFO:vacuum.world:action: 'up'
+INFO:vacuum.world:action 'up' succeeded!
+INFO:vacuum.world:agent moved to (0,0)
+INFO:vacuum.world:action: 'right'
+INFO:vacuum.world:action 'right' succeeded!
+INFO:vacuum.world:agent moved to (1,0)
+INFO:vacuum.world:action: 'right'
+INFO:vacuum.world:action 'right' succeeded!
+INFO:vacuum.world:agent moved to (2,0)
+INFO:vacuum.world:action: 'down'
+INFO:vacuum.world:action 'down' succeeded!
+INFO:vacuum.world:agent moved to (2,1)
+INFO:vacuum.world:action: 'down'
+INFO:vacuum.world:action 'down' succeeded!
+INFO:vacuum.world:agent moved to (2,2)
+INFO:vacuum.world:action: 'left'
+INFO:vacuum.world:action 'left' succeeded!
+INFO:vacuum.world:agent moved to (1,2)
+INFO:vacuum.world:action: 'left'
+INFO:vacuum.world:action 'left' succeeded!
+INFO:vacuum.world:agent moved to (0,2)
+INFO:vacuum.world:action: 'up'
+INFO:vacuum.world:action 'up' succeeded!
+INFO:vacuum.world:agent moved to (0,1)
+INFO:vacuum.world:action: 'up'
+INFO:vacuum.world:action 'up' succeeded!
+INFO:vacuum.world:agent moved to (0,0)
+INFO:vacuum.world:action: 'right'
+INFO:vacuum.world:action 'right' succeeded!
+INFO:vacuum.world:agent moved to (1,0)
+INFO:vacuum.world:action: 'right'
+INFO:vacuum.world:action 'right' succeeded!
+INFO:vacuum.world:agent moved to (2,0)
+INFO:vacuum.world:action: 'down'
+INFO:vacuum.world:action 'down' succeeded!
+INFO:vacuum.world:agent moved to (2,1)
+INFO:vacuum.world:action: 'down'
+INFO:vacuum.world:action 'down' succeeded!
+INFO:vacuum.world:agent moved to (2,2)
+INFO:vacuum.world:action: 'left'
+INFO:vacuum.world:action 'left' succeeded!
+INFO:vacuum.world:agent moved to (1,2)
+INFO:vacuum.world:action: 'left'
+INFO:vacuum.world:action 'left' succeeded!
+INFO:vacuum.world:agent moved to (0,2)
+INFO:vacuum.world:action: 'up'
+INFO:vacuum.world:action 'up' succeeded!
+INFO:vacuum.world:agent moved to (0,1)
+INFO:vacuum.world:action: 'up'
+INFO:vacuum.world:action 'up' succeeded!
+INFO:vacuum.world:agent moved to (0,0)
+INFO:vacuum.world:action: 'right'
+INFO:vacuum.world:action 'right' succeeded!
+INFO:vacuum.world:agent moved to (1,0)
+INFO:vacuum.world:action: 'right'
+INFO:vacuum.world:action 'right' succeeded!
+INFO:vacuum.world:agent moved to (2,0)
+INFO:vacuum.world:action: 'down'
+INFO:vacuum.world:action 'down' succeeded!
+INFO:vacuum.world:agent moved to (2,1)
+INFO:vacuum.world:action: 'down'
+INFO:vacuum.world:action 'down' succeeded!
+INFO:vacuum.world:agent moved to (2,2)
+INFO:vacuum.world:action: 'left'
+INFO:vacuum.world:action 'left' succeeded!
+INFO:vacuum.world:agent moved to (1,2)
+INFO:vacuum.world:action: 'left'
+INFO:vacuum.world:action 'left' succeeded!
+INFO:vacuum.world:agent moved to (0,2)
+INFO:vacuum.world:action: 'up'
+INFO:vacuum.world:action 'up' succeeded!
+INFO:vacuum.world:agent moved to (0,1)
+INFO:vacuum.world:action: 'up'
+INFO:vacuum.world:action 'up' succeeded!
+INFO:vacuum.world:agent moved to (0,0)
+INFO:vacuum.world:action: 'right'
+INFO:vacuum.world:action 'right' succeeded!
+INFO:vacuum.world:agent moved to (1,0)
+INFO:vacuum.world:action: 'right'
+INFO:vacuum.world:action 'right' succeeded!
+INFO:vacuum.world:agent moved to (2,0)
+INFO:vacuum.world:action: 'down'
+INFO:vacuum.world:action 'down' succeeded!
+INFO:vacuum.world:agent moved to (2,1)
+INFO:vacuum.world:action: 'down'
+INFO:vacuum.world:action 'down' succeeded!
+INFO:vacuum.world:agent moved to (2,2)
+INFO:vacuum.world:action: 'left'
+INFO:vacuum.world:action 'left' succeeded!
+INFO:vacuum.world:agent moved to (1,2)
+INFO:vacuum.world:action: 'left'
+INFO:vacuum.world:action 'left' succeeded!
+INFO:vacuum.world:agent moved to (0,2)
+INFO:vacuum.world:action: 'up'
+INFO:vacuum.world:action 'up' succeeded!
+INFO:vacuum.world:agent moved to (0,1)
+INFO:vacuum.world:action: 'up'
+INFO:vacuum.world:action 'up' succeeded!
+INFO:vacuum.world:agent moved to (0,0)
+INFO:vacuum.world:action: 'right'
+INFO:vacuum.world:action 'right' succeeded!
+INFO:vacuum.world:agent moved to (1,0)
+INFO:vacuum.world:action: 'right'
+INFO:vacuum.world:action 'right' succeeded!
+INFO:vacuum.world:agent moved to (2,0)
+INFO:vacuum.world:action: 'down'
+INFO:vacuum.world:action 'down' succeeded!
+INFO:vacuum.world:agent moved to (2,1)
+INFO:vacuum.world:action: 'down'
+INFO:vacuum.world:action 'down' succeeded!
+INFO:vacuum.world:agent moved to (2,2)
+INFO:vacuum.world:action: 'left'
+INFO:vacuum.world:action 'left' succeeded!
+INFO:vacuum.world:agent moved to (1,2)
+INFO:vacuum.world:action: 'left'
+INFO:vacuum.world:action 'left' succeeded!
+INFO:vacuum.world:agent moved to (0,2)
+INFO:vacuum.world:action: 'up'
+INFO:vacuum.world:action 'up' succeeded!
+INFO:vacuum.world:agent moved to (0,1)
+INFO:vacuum.world:action: 'up'
+INFO:vacuum.world:action 'up' succeeded!
+INFO:vacuum.world:agent moved to (0,0)
+INFO:vacuum.world:action: 'right'
+INFO:vacuum.world:action 'right' succeeded!
+INFO:vacuum.world:agent moved to (1,0)
+INFO:vacuum.world:action: 'right'
+INFO:vacuum.world:action 'right' succeeded!
+INFO:vacuum.world:agent moved to (2,0)
+INFO:vacuum.world:action: 'down'
+INFO:vacuum.world:action 'down' succeeded!
+INFO:vacuum.world:agent moved to (2,1)
+INFO:vacuum.world:action: 'down'
+INFO:vacuum.world:action 'down' succeeded!
+INFO:vacuum.world:agent moved to (2,2)
+INFO:vacuum.world:action: 'left'
+INFO:vacuum.world:action 'left' succeeded!
+INFO:vacuum.world:agent moved to (1,2)
+INFO:vacuum.world:action: 'left'
+INFO:vacuum.world:action 'left' succeeded!
+INFO:vacuum.world:agent moved to (0,2)
+INFO:vacuum.world:action: 'up'
+INFO:vacuum.world:action 'up' succeeded!
+INFO:vacuum.world:agent moved to (0,1)
+INFO:vacuum.world:action: 'up'
+INFO:vacuum.world:action 'up' succeeded!
+INFO:vacuum.world:agent moved to (0,0)
+INFO:vacuum.world:action: 'right'
+INFO:vacuum.world:action 'right' succeeded!
+INFO:vacuum.world:agent moved to (1,0)
+INFO:vacuum.world:action: 'right'
+INFO:vacuum.world:action 'right' succeeded!
+INFO:vacuum.world:agent moved to (2,0)
+INFO:vacuum.world:action: 'down'
+INFO:vacuum.world:action 'down' succeeded!
+INFO:vacuum.world:agent moved to (2,1)
+INFO:vacuum.world:action: 'down'
+INFO:vacuum.world:action 'down' succeeded!
+INFO:vacuum.world:agent moved to (2,2)
+INFO:vacuum.world:action: 'left'
+INFO:vacuum.world:action 'left' succeeded!
+INFO:vacuum.world:agent moved to (1,2)
+INFO:vacuum.world:action: 'left'
+INFO:vacuum.world:action 'left' succeeded!
+INFO:vacuum.world:agent moved to (0,2)
+INFO:vacuum.world:action: 'up'
+INFO:vacuum.world:action 'up' succeeded!
+INFO:vacuum.world:agent moved to (0,1)
+INFO:vacuum.world:action: 'up'
+INFO:vacuum.world:action 'up' succeeded!
+INFO:vacuum.world:agent moved to (0,0)
+INFO:vacuum.world:action: 'right'
+INFO:vacuum.world:action 'right' succeeded!
+INFO:vacuum.world:agent moved to (1,0)
+INFO:vacuum.world:action: 'right'
+INFO:vacuum.world:action 'right' succeeded!
+INFO:vacuum.world:agent moved to (2,0)
+INFO:vacuum.world:action: 'down'
+INFO:vacuum.world:action 'down' succeeded!
+INFO:vacuum.world:agent moved to (2,1)
+INFO:vacuum.world:action: 'down'
+INFO:vacuum.world:action 'down' succeeded!
+INFO:vacuum.world:agent moved to (2,2)
+INFO:vacuum.world:action: 'left'
+INFO:vacuum.world:action 'left' succeeded!
+INFO:vacuum.world:agent moved to (1,2)
+INFO:vacuum.world:action: 'left'
+INFO:vacuum.world:action 'left' succeeded!
+INFO:vacuum.world:agent moved to (0,2)
+INFO:vacuum.world:action: 'up'
+INFO:vacuum.world:action 'up' succeeded!
+INFO:vacuum.world:agent moved to (0,1)
+INFO:vacuum.world:action: 'up'
+INFO:vacuum.world:action 'up' succeeded!
+INFO:vacuum.world:agent moved to (0,0)
+INFO:vacuum.world:action: 'right'
+INFO:vacuum.world:action 'right' succeeded!
+INFO:vacuum.world:agent moved to (1,0)
+INFO:vacuum.world:action: 'right'
+INFO:vacuum.world:action 'right' succeeded!
+INFO:vacuum.world:agent moved to (2,0)
+INFO:vacuum.world:action: 'down'
+INFO:vacuum.world:action 'down' succeeded!
+INFO:vacuum.world:agent moved to (2,1)
+INFO:vacuum.world:action: 'down'
+INFO:vacuum.world:action 'down' succeeded!
+INFO:vacuum.world:agent moved to (2,2)
+INFO:vacuum.world:action: 'left'
+INFO:vacuum.world:action 'left' succeeded!
+INFO:vacuum.world:agent moved to (1,2)
+INFO:vacuum.world:action: 'left'
+INFO:vacuum.world:action 'left' succeeded!
+INFO:vacuum.world:agent moved to (0,2)
+INFO:vacuum.world:action: 'up'
+INFO:vacuum.world:action 'up' succeeded!
+INFO:vacuum.world:agent moved to (0,1)
+INFO:vacuum.world:action: 'up'
+INFO:vacuum.world:action 'up' succeeded!
+INFO:vacuum.world:agent moved to (0,0)
+INFO:vacuum.world:action: 'right'
+INFO:vacuum.world:action 'right' succeeded!
+INFO:vacuum.world:agent moved to (1,0)
