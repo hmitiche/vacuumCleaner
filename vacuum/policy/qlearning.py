@@ -132,11 +132,11 @@ class QLearnPolicy(CleanPolicy):
                 if visit_counts[new_position] == 1:
                     reward += 2.0
                 else:
-                    reward -= 1.0 * np.log(visit_counts[new_position])
+                    reward -= 0.5 * np.log(visit_counts[new_position])
 
 
 
-                #episode_reward += reward
+                episode_reward += reward
 
                 # Mise à jour Q-table
                 new_state_index = self.encode_state(new_obs)
@@ -146,7 +146,7 @@ class QLearnPolicy(CleanPolicy):
                 )
 
                 # Mise à jour état
-                episode_reward += reward
+
                 state_index = new_state_index
                 obs = new_obs
 

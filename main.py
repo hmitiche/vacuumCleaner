@@ -132,7 +132,7 @@ def main():
 		print("[info] Mode Q-learning en ligne activé.")
 		env.unwrapped.render_mode = rmode
 
-		nbr_episodes = 10
+		nbr_episodes = 100
 		rewards = np.zeros(nbr_episodes)
 		cleanings = np.zeros(nbr_episodes)
 		travels = np.zeros(nbr_episodes)
@@ -217,7 +217,7 @@ def main():
 		# Demander à l'utilisateur s'il veut sauvegarder les résultats et la Q-table
 		if input("[prompt] save results and Q-table? [y/n]") == 'y':
 			results = {'reward': rewards, 'cleaned': cleanings, 'travel': travels}
-			Tools.save_simulation_online_results(world_id, policy_id, results)
+			Tools.save_results(world_id, policy_id, results)
 			policy.save_qtable()  # sauvegarder la Q-table
 			print("[info] Q-table sauvegardée avec succès.")
 		else:
@@ -249,7 +249,7 @@ def main():
 			env.unwrapped.render_mode = rmode		# restore render mode for QL ag. test
 			# test the trained QL agent
 
-	#nbr_episodes=10
+	nbr_episodes=100
 	print('[info] simulating {} episodes...'.format(nbr_episodes))
 	logger.info("[info] map:'{}'' policy:'{}' location_sensor:'{}' eps:{}\
 		 max_steps:{}".format(world_id, policy_id, location_sensor,\
